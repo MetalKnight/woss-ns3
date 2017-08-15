@@ -533,6 +533,8 @@ private:
   int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing
   WossSimTime m_simTime;  //!< woss object configuration: woss simulation times (start and end sim times)
   woss::BellhopCreator *m_bellhopCreator; //!< the helper will automatically allocate the woss creator
+  double m_boxDepth; //!< woss object configuration: maximum depth to trace rays to; deeper rays will be ignored
+  double m_boxRange; //!< woss object configuration: maximum range to trace rats to; longer rays will be ignored
 
   bool m_wossManagerDebug; //!< enable/disable the debug prints of the woss manager.
   bool m_isTimeEvolutionActive; //!< enable/disable the time evolution feature.

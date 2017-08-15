@@ -58,7 +58,8 @@
 #define WH_SIMULATION_TIMES_DEFAULT ()
 #define WH_CONCURRENT_THREADS_DEFAULT (0.0)
 #define WH_BELLHOP_ARR_SYNTAX_DEFAULT (1)
-
+#define WH_BOX_DEPTH (-3000.0)
+#define WH_BOX_RANGE (-3000.0)
 
 namespace ns3 {
 
@@ -222,6 +223,8 @@ WossHelper::WossHelper ()
     m_bellhopArrSyntax (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
     m_simTime (),
     m_bellhopCreator (NULL),
+	m_boxDepth (WH_BOX_DEPTH),
+	m_boxRange (WH_BOX_RANGE),
     m_wossManagerDebug (WH_DEBUG_DEFAULT),
     m_isTimeEvolutionActive (false),
     m_concurrentThreads (WH_CONCURRENT_THREADS_DEFAULT),
@@ -491,6 +494,8 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
   NS_ASSERT ((m_simTime.start_time.isValid () == true) && (m_simTime.end_time.isValid ()) );
   m_bellhopCreator->setSimTime (m_simTime);
   m_bellhopCreator->setBellhopArrSyntax ((woss::BellhopArrSyntax)m_bellhopArrSyntax);
+  m_bellhopCreator->setBoxDepth(m_boxDepth);
+  m_bellhopCreator->setBoxRange(m_boxRange);
   m_wossController->setWossCreator (m_bellhopCreator);
 
   NS_LOG_DEBUG ("Setting WossDbManager");
@@ -1544,6 +1549,16 @@ WossHelper::GetTypeId ()
                    BooleanValue (WH_DEBUG_DEFAULT),
                    MakeBooleanAccessor (&WossHelper::m_wossControllerDebug),
                    MakeBooleanChecker () )
+	.AddAttribute ("WossBoxDepth",
+				   "The maximum depth to which Bellhop rays will be traced",
+				   DoubleValue (WH_BOX_DEPTH),
+				   MakeDoubleAccessor (&WossHelper::m_boxDepth),
+				   MakeDoubleChecker<double> () )
+	.AddAttribute ("WossBoxRange",
+				   "The maximum range to which Bellhop rays will be traced",
+				   DoubleValue (WH_BOX_RANGE),
+				   MakeDoubleAccessor (&WossHelper::m_boxRange),
+				   MakeDoubleChecker<double> () )
   ;
 
   return tid;
