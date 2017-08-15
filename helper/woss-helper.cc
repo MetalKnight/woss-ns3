@@ -223,8 +223,8 @@ WossHelper::WossHelper ()
     m_bellhopArrSyntax (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
     m_simTime (),
     m_bellhopCreator (NULL),
-	m_boxDepth (WH_BOX_DEPTH),
-	m_boxRange (WH_BOX_RANGE),
+    m_boxDepth (WH_BOX_DEPTH),
+    m_boxRange (WH_BOX_RANGE),
     m_wossManagerDebug (WH_DEBUG_DEFAULT),
     m_isTimeEvolutionActive (false),
     m_concurrentThreads (WH_CONCURRENT_THREADS_DEFAULT),
@@ -1549,16 +1549,16 @@ WossHelper::GetTypeId ()
                    BooleanValue (WH_DEBUG_DEFAULT),
                    MakeBooleanAccessor (&WossHelper::m_wossControllerDebug),
                    MakeBooleanChecker () )
-	.AddAttribute ("WossBoxDepth",
-				   "The maximum depth to which Bellhop rays will be traced",
-				   DoubleValue (WH_BOX_DEPTH),
-				   MakeDoubleAccessor (&WossHelper::m_boxDepth),
-				   MakeDoubleChecker<double> () )
-	.AddAttribute ("WossBoxRange",
-				   "The maximum range to which Bellhop rays will be traced",
-				   DoubleValue (WH_BOX_RANGE),
-				   MakeDoubleAccessor (&WossHelper::m_boxRange),
-				   MakeDoubleChecker<double> () )
+    .AddAttribute ("WossBoxDepth",
+                   "The maximum depth to which Bellhop rays will be traced",
+                   DoubleValue (WH_BOX_DEPTH),
+                   MakeDoubleAccessor (&WossHelper::m_boxDepth),
+                   MakeDoubleChecker<double> () )
+    .AddAttribute ("WossBoxRange",
+                   "The maximum range to which Bellhop rays will be traced",
+                   DoubleValue (WH_BOX_RANGE),
+                   MakeDoubleAccessor (&WossHelper::m_boxRange),
+                   MakeDoubleChecker<double> () )
   ;
 
   return tid;
