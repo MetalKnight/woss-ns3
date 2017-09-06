@@ -13,7 +13,7 @@ WOSS can be integrated in any network simulator or simulation tool that supports
 - NetCDF
 - Acoustic Toolbox
 
-Latest WOSS source code, installation instructions and related libraries can be found at http://telecom.dei.unipd.it/woss
+Latest WOSS source code, installation instructions and related libraries can be found at http://telecom.dei.unipd.it/ns/woss/
 
 'woss-ns3' module will be automatically installed by the ns3 app installer, but this feature is not yet complete.
 
