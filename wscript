@@ -34,7 +34,7 @@ def configure(conf):
                                      "WOSS not enabled (see option --with-woss)")
         # Add this module to the list of modules that won't be built
         # if they are enabled.
-        conf.env['MODULES_NOT_BUILT'].append('woss')
+        conf.env['MODULES_NOT_BUILT'].append('woss-ns3')
         return
 
     if Options.options.with_woss_lib:
@@ -73,7 +73,7 @@ def configure(conf):
 
         # Add this module to the list of modules that won't be built
         # if they are enabled.
-        conf.env['MODULES_NOT_BUILT'].append('woss')
+        conf.env['MODULES_NOT_BUILT'].append('woss-ns3')
         return
 
     if conf.env['WITH_WOSS_SOURCE']:
@@ -90,7 +90,7 @@ def configure(conf):
 
                 # Add this module to the list of modules that won't be built
                 # if they are enabled.
-                conf.env['MODULES_NOT_BUILT'].append('woss')
+                conf.env['MODULES_NOT_BUILT'].append('woss-ns3')
                 return
 
         conf.env['LIBPATH_WOSS']=conf.env['WITH_WOSS_LIB']
@@ -120,10 +120,10 @@ def configure(conf):
 
 
 def build(bld):
-    if 'woss' in bld.env['MODULES_NOT_BUILT']:
+    if 'woss-ns3' in bld.env['MODULES_NOT_BUILT']:
         return
 
-    module = bld.create_ns3_module('woss', ['network', 'energy', 'mobility', 'uan'])
+    module = bld.create_ns3_module('woss-ns3', ['network', 'energy', 'mobility', 'uan'])
     module.source = [
         'model/definitions/woss-location.cc',
         'model/definitions/woss-time-reference.cc',
@@ -140,7 +140,7 @@ def build(bld):
         'test/woss-test.cc',
         ]
     headers = bld(features='ns3header')
-    headers.module = 'woss'
+    headers.module = 'woss-ns3'
     headers.source = [
         'model/definitions/woss-location.h',
         'model/definitions/woss-time-reference.h',
