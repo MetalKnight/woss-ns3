@@ -161,5 +161,5 @@ def build(bld):
             module_test.use.extend(['WOSS'])
 
     if (bld.env['ENABLE_EXAMPLES']):
-      bld.recurse('examples')
+        bld.recurse('examples')
 
