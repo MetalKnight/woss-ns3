@@ -57,9 +57,10 @@
 #define WH_ALTIMETRY_TYPE_DEFAULT "L"
 #define WH_SIMULATION_TIMES_DEFAULT ()
 #define WH_CONCURRENT_THREADS_DEFAULT (0.0)
-#define WH_BELLHOP_ARR_SYNTAX_DEFAULT (1)
+#define WH_BELLHOP_ARR_SYNTAX_DEFAULT (2)
 #define WH_BOX_DEPTH (-3000.0)
 #define WH_BOX_RANGE (-3000.0)
+#define WH_GEBCO_FORMAT_DEFAULT (2)
 
 namespace ns3 {
 
@@ -187,7 +188,7 @@ WossHelper::WossHelper ()
     m_sspDbCreator (NULL),
     m_bathyDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_bathyDbDebug (WH_DEBUG_DEFAULT),
-    m_bathyDbUseThirtySecsPrec (true),
+    m_bathyDbGebcoFormat(WH_GEBCO_FORMAT_DEFAULT),
     m_bathyDbFilePath (WH_STRING_DEFAULT),
     m_bathyDbCreator (NULL),
     m_wossDbManagerDebug (WH_DEBUG_DEFAULT),
@@ -370,6 +371,7 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
       m_bathyDbCreator->setDbPathName (m_bathyDbFilePath);
       m_bathyDbCreator->setDebug (m_bathyDbCreatorDebug);
       m_bathyDbCreator->setWossDebug (m_bathyDbDebug);
+      m_bathyDbCreator->setGebcoBathyType ((woss::GEBCO_BATHY_TYPE)m_bathyDbGebcoFormat);
 
       m_wossController->setBathymetryDbCreator (m_bathyDbCreator);
     }
@@ -1349,11 +1351,11 @@ WossHelper::GetTypeId ()
                    BooleanValue (WH_DEBUG_DEFAULT),
                    MakeBooleanAccessor (&WossHelper::m_bathyDbDebug),
                    MakeBooleanChecker () )
-    .AddAttribute ("BathyDbUseThirtySecsPrecision",
-                   "If true the Bathymetry Db will try to load the 30 seconds db version, the one minute one otherwise",
-                   BooleanValue (true),
-                   MakeBooleanAccessor (&WossHelper::m_bathyDbUseThirtySecsPrec),
-                   MakeBooleanChecker () )
+    .AddAttribute ("BathyDbGebcoFormat",
+                   "Sets up the the GEBCO database format: 1=one minute 1D, 2=thirty seconds 1D, 3=thirty seconds 2D",
+                   IntegerValue (WH_GEBCO_FORMAT_DEFAULT),
+                   MakeIntegerAccessor (&WossHelper::m_bathyDbGebcoFormat),
+                   MakeIntegerChecker<int> () )
     .AddAttribute ("BathyDbCoordFilePath",
                    "Bathymetry Db will read the GEBCO database from this file (full path required)",
                    StringValue (WH_STRING_DEFAULT),
@@ -1510,7 +1512,7 @@ WossHelper::GetTypeId ()
                    MakeWossSimTimeAccessor (&WossHelper::m_simTime),
                    MakeWossSimTimeChecker () )
     .AddAttribute ("WossBellhopArrSyntax", 
-                   "Syntax to be used during bellhop arr file parsing",
+                   "Syntax to be used during bellhop arr file parsing: 0",
                    IntegerValue (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
                    MakeIntegerAccessor (&WossHelper::m_bellhopArrSyntax),
                    MakeIntegerChecker<int> () )

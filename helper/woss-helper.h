@@ -494,7 +494,7 @@ private:
 
   bool m_bathyDbCreatorDebug; //!< enable/disable the debug prints of the woss Bathymetry database creator.
   bool m_bathyDbDebug; //!< enable/disable the debug prints of the woss Bathymetry database (GEBCO).
-  bool m_bathyDbUseThirtySecsPrec; //!< setup the the GEBCO database format resolution: thirty second of arc, or one minute of arc (see GEBCO formats).
+  int m_bathyDbGebcoFormat; //!< setup the the GEBCO database format: 1=one minute 1D, 2=thirty seconds 1D, 3=thirty seconds 2D
   ::std::string m_bathyDbFilePath; //!< setup the path of the woss GEBCO database
   woss::BathyGebcoDbCreator *m_bathyDbCreator; //!< the helper will automatically allocate the woss GEBCO bathymetry db creator
 
