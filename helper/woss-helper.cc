@@ -1512,7 +1512,7 @@ WossHelper::GetTypeId ()
                    MakeWossSimTimeAccessor (&WossHelper::m_simTime),
                    MakeWossSimTimeChecker () )
     .AddAttribute ("WossBellhopArrSyntax", 
-                   "Syntax to be used during bellhop arr file parsing: 0",
+                   "Syntax to be used during bellhop arr file parsing",
                    IntegerValue (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
                    MakeIntegerAccessor (&WossHelper::m_bellhopArrSyntax),
                    MakeIntegerChecker<int> () )
