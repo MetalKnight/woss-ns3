@@ -82,8 +82,8 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
       wossHelper->SetAttribute ("SedimDbMarsdenFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_mardsen_square.nc"));
       wossHelper->SetAttribute ("SedimDbMarsdenOneFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_mardsen_one_degree.nc"));
       wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/2WOA2009_SSP_April.nc"));
-      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_2D.nc"));
-      wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
+      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2019_2D.nc"));
+      wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (4)); // 15 seconds, 2D netcdf format
     }
   wossHelper->SetAttribute ("WossCleanWorkDir", BooleanValue (false));
   wossHelper->SetAttribute ("WossWorkDirPath", StringValue ("./woss-aloha-example-output/work-dir/"));

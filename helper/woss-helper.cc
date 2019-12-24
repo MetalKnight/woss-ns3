@@ -60,7 +60,7 @@
 #define WH_BELLHOP_ARR_SYNTAX_DEFAULT (2)
 #define WH_BOX_DEPTH (-3000.0)
 #define WH_BOX_RANGE (-3000.0)
-#define WH_GEBCO_FORMAT_DEFAULT (2)
+#define WH_GEBCO_FORMAT_DEFAULT (4)
 
 namespace ns3 {
 
@@ -1352,7 +1352,7 @@ WossHelper::GetTypeId ()
                    MakeBooleanAccessor (&WossHelper::m_bathyDbDebug),
                    MakeBooleanChecker () )
     .AddAttribute ("BathyDbGebcoFormat",
-                   "Sets up the the GEBCO database format: 1=one minute 1D, 2=thirty seconds 1D, 3=thirty seconds 2D",
+                   "Sets up the the GEBCO database format: 0 = 1D one minute, 1 = 1D 30 seconds, 2 = 2D one minute, 3 = 2D 30 seconds, 4 = 2D 15 seconds",
                    IntegerValue (WH_GEBCO_FORMAT_DEFAULT),
                    MakeIntegerAccessor (&WossHelper::m_bathyDbGebcoFormat),
                    MakeIntegerChecker<int> () )
