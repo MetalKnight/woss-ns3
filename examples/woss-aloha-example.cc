@@ -66,7 +66,7 @@ Experiment::Experiment ()
     m_bytesTotal (0),
     m_dataMode ()
 {
-  m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
+  //m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
 }
 
 void
