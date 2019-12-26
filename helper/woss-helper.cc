@@ -60,7 +60,7 @@
 #define WH_BELLHOP_ARR_SYNTAX_DEFAULT (2)
 #define WH_BOX_DEPTH (-3000.0)
 #define WH_BOX_RANGE (-3000.0)
-#define WH_GEBCO_FORMAT_DEFAULT (4)
+#define WH_GEBCO_FORMAT_DEFAULT (3)
 
 namespace ns3 {
 
