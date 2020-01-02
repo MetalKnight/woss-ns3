@@ -172,6 +172,8 @@ def build(bld):
 
     if bld.env['WOSS']:
         if bld.env['NETCDF']:
+            module.cxxflags = ['-Wno-unused-variable']
+            module.cppflags = ['-Wno-unused-variable']
             module.use.extend(['WOSS', 'NETCDF'])
             module_test.use.extend(['WOSS', 'NETCDF'])
         else:
