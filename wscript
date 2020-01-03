@@ -172,8 +172,10 @@ def build(bld):
 
     if bld.env['WOSS']:
         if bld.env['NETCDF']:
-            module.cxxflags = ['-Wno-unused-variable']
-            module.cppflags = ['-Wno-unused-variable']
+            #Temporarily disable "unused variable" warning, until NetCDF-C++4 fixes it
+            module.env.append_value('CXXFLAGS', '-Wno-unused-variable')
+            module.env.append_value('CPPFLAGS', '-Wno-unused-variable')
+
             module.use.extend(['WOSS', 'NETCDF'])
             module_test.use.extend(['WOSS', 'NETCDF'])
         else:
