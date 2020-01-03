@@ -96,7 +96,7 @@ WossTest::WossTest ()
     m_useMultithread (false),
     m_sinkCoord (42.59, 10.125, 70.0)
 {
-
+  //m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
 }
 
 void
@@ -112,7 +112,13 @@ WossTest::InitWossHelper (Ptr<WossPropModel> wossProp)
       m_wossHelper->SetAttribute ("SedimDbMarsdenFilePath", StringValue (m_databasePath + "/sea_floor/DECK41_mardsen_square.nc"));
       m_wossHelper->SetAttribute ("SedimDbMarsdenOneFilePath", StringValue (m_databasePath + "/sea_floor/DECK41_mardsen_one_degree.nc"));
       m_wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/standard_depth/2WOA2009_SSP_April.nc"));
-      m_wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/gebco_08.nc"));
+#if defined (WOSS_NETCDF4_SUPPORT)
+      m_wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (4)); // 15 seconds, 2D netcdf format
+      m_wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2019.nc"));
+#else
+      m_wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
+      m_wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_2D.nc"));
+#endif // defined (WOSS_NETCDF4_SUPPORT)
     }
 
   m_wossHelper->SetAttribute ("WossCleanWorkDir", BooleanValue (false));
@@ -164,7 +170,7 @@ WossTest::CreateNode (Vector pos, Ptr<UanChannel> chan)
 
   mobility->SetPosition (pos);
   node->AggregateObject (mobility);
-  mac->SetAddress (UanAddress::Allocate ());
+  mac->SetAddress (Mac8Address::Allocate ());
 
   dev->SetPhy (phy);
   dev->SetMac (mac);

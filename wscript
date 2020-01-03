@@ -153,7 +153,7 @@ def build(bld):
         'helper/woss-helper.cc',
         ]
 
-    module_test = bld.create_ns3_module_test_library('woss')
+    module_test = bld.create_ns3_module_test_library('woss-ns3')
     module_test.source = [
         'test/woss-test.cc',
         ]
@@ -174,6 +174,7 @@ def build(bld):
         if bld.env['NETCDF']:
             #Temporarily disable "unused variable" warning, until NetCDF-C++4 fixes it
             module.env.append_value('CXXFLAGS', '-Wno-unused-variable')
+            module_test.env.append_value('CXXFLAGS', '-Wno-unused-variable')
 
             module.use.extend(['WOSS', 'NETCDF'])
             module_test.use.extend(['WOSS', 'NETCDF'])
