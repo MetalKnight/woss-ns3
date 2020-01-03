@@ -7,4 +7,3 @@ def build(bld):
     #Temporarily disable "unused variable" warning, until NetCDF-C++4 fixes it
     if bld.env['NETCDF']:
       obj.env.append_value('CXXFLAGS', '-Wno-unused-variable')
-      obj.env.append_value('CPPFLAGS', '-Wno-unused-variable')
