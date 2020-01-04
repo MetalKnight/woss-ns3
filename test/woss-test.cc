@@ -96,7 +96,7 @@ WossTest::WossTest ()
     m_useMultithread (false),
     m_sinkCoord (42.59, 10.125, 70.0)
 {
-
+  //m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
 }
 
 void
