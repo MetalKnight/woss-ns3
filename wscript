@@ -153,7 +153,7 @@ def build(bld):
         'helper/woss-helper.cc',
         ]
 
-    module_test = bld.create_ns3_module_test_library('woss')
+    module_test = bld.create_ns3_module_test_library('woss-ns3')
     module_test.source = [
         'test/woss-test.cc',
         ]

@@ -176,6 +176,7 @@ WossHelper::WossHelper ()
     m_resDbCreatorPressTxt (NULL),
     m_resDbCreatorTimeArrBin (NULL),
     m_resDbCreatorTimeArrTxt (NULL),
+#if defined (WOSS_NETCDF_SUPPORT)
     m_sedimDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sedimDbDebug (WH_DEBUG_DEFAULT),
     m_sedimDbCoordFilePath (WH_STRING_DEFAULT),
@@ -191,6 +192,7 @@ WossHelper::WossHelper ()
     m_bathyDbGebcoFormat(WH_GEBCO_FORMAT_DEFAULT),
     m_bathyDbFilePath (WH_STRING_DEFAULT),
     m_bathyDbCreator (NULL),
+#endif // defined (WOSS_NETCDF_SUPPORT)
     m_wossDbManagerDebug (WH_DEBUG_DEFAULT),
     m_wossDbManager (NULL),
     m_wossCreatorDebug (WH_DEBUG_DEFAULT),
@@ -280,6 +282,7 @@ WossHelper::DoDispose (void)
       delete m_wossDbManager;
     }
 
+#if defined (WOSS_NETCDF_SUPPORT)
   if (m_bathyDbCreator != NULL)
     {
       delete m_bathyDbCreator;
@@ -294,6 +297,7 @@ WossHelper::DoDispose (void)
     {
       delete m_sedimDbCreator;
     }
+#endif // defined (WOSS_NETCDF_SUPPORT)
 
   if (m_resDbCreatorPressBin != NULL)
     {
@@ -362,6 +366,7 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 
   m_wossController = new woss::WossController ();
 
+#if defined (WOSS_NETCDF_SUPPORT)
   NS_LOG_DEBUG ("Setting BathymetryDbCreator");
 
   if ( m_bathyDbFilePath != WH_STRING_DEFAULT )
@@ -404,6 +409,7 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 
       m_wossController->setSSPDbCreator (m_sspDbCreator);
     }
+#endif // defined (WOSS_NETCDF_SUPPORT)
 
   NS_LOG_DEBUG ("Setting ResDbCreator");
 
@@ -1083,7 +1089,7 @@ WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txC
 
 
 bool
-WossHelper::ImportCustomSsp ( const ::std::string &sspFileName, const woss::Coord& txCoord, double bearing, const woss::Time& timeValue)
+WossHelper::ImportCustomSsp (const ::std::string &sspFileName, const woss::Coord& txCoord, double bearing, const woss::Time& timeValue)
 {
   CheckInitialized ();
 
@@ -1301,6 +1307,7 @@ WossHelper::GetTypeId ()
                    StringValue (WH_STRING_DEFAULT),
                    MakeStringAccessor (&WossHelper::m_resDbFileName),
                    MakeStringChecker () )
+#if defined (WOSS_NETCDF_SUPPORT)
     .AddAttribute ("SedimentDbCreatorDebug",
                    "A boolean that enables or disables the debug screen output of Sediment Db Creator",
                    BooleanValue (WH_DEBUG_DEFAULT),
@@ -1361,6 +1368,7 @@ WossHelper::GetTypeId ()
                    StringValue (WH_STRING_DEFAULT),
                    MakeStringAccessor (&WossHelper::m_bathyDbFilePath),
                    MakeStringChecker () )
+#endif // defined (WOSS_NETCDF_SUPPORT)
     .AddAttribute ("WossDbManagerDebug",
                    "A boolean that enables or disables the debug screen output of WossDbManager",
                    BooleanValue (WH_DEBUG_DEFAULT),
