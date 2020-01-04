@@ -31,13 +31,15 @@
 #include <time-arrival-definitions.h>
 #include <transducer-definitions.h>
 #include <transducer-handler.h>
-#include <bathymetry-gebco-db-creator.h>
 #include <res-pressure-bin-db-creator.h>
 #include <res-pressure-txt-db-creator.h>
 #include <res-time-arr-bin-db-creator.h>
 #include <res-time-arr-txt-db-creator.h>
+#if defined (WOSS_NETCDF_SUPPORT)
+#include <bathymetry-gebco-db-creator.h>
 #include <sediment-deck41-db-creator.h>
 #include <ssp-woa2005-db-creator.h>
+#endif // defined (WOSS_NETCDF_SUPPORT)
 #include <bellhop-creator.h>
 #include <woss-manager-simple.h>
 #include <woss-controller.h>
@@ -480,6 +482,7 @@ private:
   woss::ResTimeArrBinDbCreator *m_resDbCreatorTimeArrBin; //!< the helper will automatically allocate the desired result database creator based on current configuration.
   woss::ResTimeArrTxtDbCreator *m_resDbCreatorTimeArrTxt; //!< the helper will automatically allocate the desired result database creator based on current configuration.
 
+#if defined (WOSS_NETCDF_SUPPORT)
   bool m_sedimDbCreatorDebug; //!< enable/disable the debug prints of the woss sediment database creator.
   bool m_sedimDbDebug; //!< enable/disable the debug prints of the woss sediment database.
   ::std::string m_sedimDbCoordFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with decimal degrees resolution
@@ -497,6 +500,7 @@ private:
   int m_bathyDbGebcoFormat; //!< setup the the GEBCO database format: 0=1D one minute, 1=1D 30 seconds, 2=2D one minute, 3=2D 30 seconds, 4=2D 15 seconds
   ::std::string m_bathyDbFilePath; //!< setup the path of the woss GEBCO database
   woss::BathyGebcoDbCreator *m_bathyDbCreator; //!< the helper will automatically allocate the woss GEBCO bathymetry db creator
+#endif // defined (WOSS_NETCDF_SUPPORT)
 
   bool m_wossDbManagerDebug; //!< enable/disable the debug prints of the woss DB manager object.
 

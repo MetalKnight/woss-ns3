@@ -117,9 +117,6 @@ def configure(conf):
                 conf.env['LIB_NETCDF'] = ['netcdf_c++', 'netcdf']
 
                 conf.env['NETCDF'] = conf.check(mandatory=True, lib='netcdf_c++ netcdf', libpath=conf.env['WITH_NETCDF_LIB'], define_name='NETCDF_CPP', uselib_store='NETCDF_CPP', msg="Checking the given NETCDF library")
-
-                conf.report_optional_feature("WOSS", "WOSS Integration Framework", True,
-                      "WOSS correctly configured")
             else:
                 conf.msg("NetCDF4 and HDF5 source code path", ("%s " % conf.env['WITH_NETCDF4_SRC']))
     
@@ -130,12 +127,10 @@ def configure(conf):
                 conf.env['LIB_NETCDF'] = ['netcdf_c++4', 'netcdf', 'hdf5']
 
                 conf.env['NETCDF'] = conf.check(mandatory=True, lib='netcdf_c++4 netcdf hdf5', libpath=conf.env['WITH_NETCDF4_LIB'], define_name='NETCDF_CPP', uselib_store='NETCDF_CPP', msg="Checking the given NETCDF4 and HDF5 libraries")
-
-                conf.report_optional_feature("WOSS", "WOSS Integration Framework", True,
-                      "WOSS correctly configured")
         else:
-             conf.msg("Checking for NetCDF/NetCDF4 source location", False)
+            conf.msg("Checking for NetCDF/NetCDF4 source location", False)
 
+        conf.report_optional_feature("WOSS", "WOSS Integration Framework", True, "WOSS correctly configured")
 
 def build(bld):
     if 'woss-ns3' in bld.env['MODULES_NOT_BUILT']:
@@ -153,7 +148,7 @@ def build(bld):
         'helper/woss-helper.cc',
         ]
 
-    module_test = bld.create_ns3_module_test_library('woss')
+    module_test = bld.create_ns3_module_test_library('woss-ns3')
     module_test.source = [
         'test/woss-test.cc',
         ]
