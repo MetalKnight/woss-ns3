@@ -20,10 +20,10 @@ Latest WOSS source code, installation instructions and related libraries can be 
 It can also be manually installed:
 - by downloading and installing the recommended Acoustic Toolbox library
 - with optional NetCDF support, by downloading and installing the recommended HDF5, NetCDF libraries, with NetCDF4 format support
-- by downloading and installing the latest WOSS library
+- by downloading and installing the latest WOSS library with optional NetCDF4 and HDF5 support
 - by cloning this repository in the `<ns3-dir>/src` path and then running one of the following:
-  - NetCDF4 and HDF5 support `./waf configure 
---with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf4-install=<netcdf4_and_hdf5_installed_path>`
+  - NetCDF4 and HDF5 support, *pay attention to the CXXFLAGS inline redefinition due to a unresolved NetCDF-C++4 API warning* `./waf configure 
+--with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf4-install=<netcdf4_and_hdf5_installed_path> CXXFLAGS="-Wall -Werror -Wno-unused-variable"`
   - with no NetCDF support `./waf configure --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path>`
 - for info on how to install all the required libraries with the suggested paths, please check http://telecom.dei.unipd.it/ns/woss/doxygen/installation.html
 
