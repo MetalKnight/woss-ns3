@@ -58,9 +58,18 @@
 #define WH_SIMULATION_TIMES_DEFAULT ()
 #define WH_CONCURRENT_THREADS_DEFAULT (0.0)
 #define WH_BELLHOP_ARR_SYNTAX_DEFAULT (2)
+#define WH_BELLHOP_ARR_SYNTAX_MIN (0)
+#define WH_BELLHOP_ARR_SYNTAX_MAX (2)
 #define WH_BOX_DEPTH (-3000.0)
 #define WH_BOX_RANGE (-3000.0)
 #define WH_GEBCO_FORMAT_DEFAULT (3)
+#define WH_GEBCO_FORMAT_MIN (0)
+#define WH_GEBCO_FORMAT_MAX (4)
+#if defined (WOSS_NETCDF4_SUPPORT)
+#define WH_WOA_DB_TYPE_DEFAULT (1)
+#define WH_WOA_DB_TYPE_MIN (0)
+#define WH_WOA_DB_TYPE_MAX (1)
+#endif // defined (WOSS_NETCDF_SUPPORT)
 
 namespace ns3 {
 
@@ -186,6 +195,9 @@ WossHelper::WossHelper ()
     m_sspDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sspDbDebug (WH_DEBUG_DEFAULT),
     m_sspDbFilePath (WH_STRING_DEFAULT),
+#if defined (WOSS_NETCDF4_SUPPORT)
+    m_sspWoaDbType (WH_WOA_DB_TYPE_DEFAULT),
+#endif // defined (WOSS_NETCDF_SUPPORT)
     m_sspDbCreator (NULL),
     m_bathyDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_bathyDbDebug (WH_DEBUG_DEFAULT),
@@ -401,7 +413,11 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 
   if ( m_sspDbFilePath != WH_STRING_DEFAULT )
     {
+#if defined (WOSS_NETCDF4_SUPPORT)
+      m_sspDbCreator = new woss::SspWoa2005DbCreator ((woss::WOADbType)m_sspWoaDbType);
+#else
       m_sspDbCreator = new woss::SspWoa2005DbCreator ();
+#endif // defined (WOSS_NETCDF_SUPPORT)
 
       m_sspDbCreator->setDbPathName (m_sspDbFilePath);
       m_sspDbCreator->setDebug (m_sspDbCreatorDebug);
@@ -1348,6 +1364,13 @@ WossHelper::GetTypeId ()
                    StringValue (WH_STRING_DEFAULT),
                    MakeStringAccessor (&WossHelper::m_sspDbFilePath),
                    MakeStringChecker () )
+#if defined (WOSS_NETCDF4_SUPPORT)
+    .AddAttribute ("SspDbWoaDbType",
+                   "SSP WOA Db Type: 0 = 2005 Format Db, 1 = 2013 Format Db",
+                   IntegerValue (WH_WOA_DB_TYPE_DEFAULT),
+                   MakeIntegerAccessor (&WossHelper::m_sspWoaDbType),
+                   MakeIntegerChecker<int> (WH_WOA_DB_TYPE_MIN, WH_WOA_DB_TYPE_MAX) )
+#endif // defined (WOSS_NETCDF4_SUPPORT)
     .AddAttribute ("BathyDbCreatorDebug",
                    "A boolean that enables or disables the debug screen output of Bathymetry Db Creator",
                    BooleanValue (WH_DEBUG_DEFAULT),
@@ -1362,7 +1385,7 @@ WossHelper::GetTypeId ()
                    "Sets up the the GEBCO database format: 0 = 1D one minute, 1 = 1D 30 seconds, 2 = 2D one minute, 3 = 2D 30 seconds, 4 = 2D 15 seconds",
                    IntegerValue (WH_GEBCO_FORMAT_DEFAULT),
                    MakeIntegerAccessor (&WossHelper::m_bathyDbGebcoFormat),
-                   MakeIntegerChecker<int> () )
+                   MakeIntegerChecker<int> (WH_GEBCO_FORMAT_MIN, WH_GEBCO_FORMAT_MAX) )
     .AddAttribute ("BathyDbCoordFilePath",
                    "Bathymetry Db will read the GEBCO database from this file (full path required)",
                    StringValue (WH_STRING_DEFAULT),
@@ -1520,10 +1543,10 @@ WossHelper::GetTypeId ()
                    MakeWossSimTimeAccessor (&WossHelper::m_simTime),
                    MakeWossSimTimeChecker () )
     .AddAttribute ("WossBellhopArrSyntax", 
-                   "Syntax to be used during bellhop arr file parsing",
+                   "Syntax to be used during bellhop arr file parsing, range [0-2]",
                    IntegerValue (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
                    MakeIntegerAccessor (&WossHelper::m_bellhopArrSyntax),
-                   MakeIntegerChecker<int> () )
+                   MakeIntegerChecker<int> (WH_BELLHOP_ARR_SYNTAX_MIN, WH_BELLHOP_ARR_SYNTAX_MAX) )
     .AddAttribute ("WossManagerDebug",
                    "A boolean that enables or disables the debug screen output of WossManager object",
                    BooleanValue (WH_DEBUG_DEFAULT),
