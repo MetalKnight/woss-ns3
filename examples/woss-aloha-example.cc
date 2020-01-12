@@ -91,7 +91,7 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
 #else
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
       wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_2D.nc"));
-      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2009/2WOA2013_SSP_April.nc"));
+      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2009/2WOA2009_SSP_April.nc"));
 #endif // defined (WOSS_NETCDF4_SUPPORT)
 #endif // defined (WOSS_NETCDF_SUPPORT)
     }
