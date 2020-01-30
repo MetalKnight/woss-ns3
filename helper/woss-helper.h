@@ -103,6 +103,7 @@ class WossHelper : public Object
 {
 
 public:
+
   WossHelper (); //!< Default constructor.
 
   virtual ~WossHelper (); //!< Default destructor.
@@ -493,6 +494,9 @@ private:
   bool m_sspDbCreatorDebug; //!< enable/disable the debug prints of the woss SSP database creator.
   bool m_sspDbDebug; //!< enable/disable the debug prints of the woss SSP database.
   ::std::string m_sspDbFilePath; //!< setup the path of the woss monthly SSP database indexed by geographical coordinates
+#if defined (WOSS_NETCDF4_SUPPORT)
+  int m_sspWoaDbType; //!< WOA SSP Db Type: 0 = 2005 format Db, 1 2013 Format Db
+#endif // defined (WOSS_NETCDF_SUPPORT)
   woss::SspWoa2005DbCreator *m_sspDbCreator; //!< the helper will automatically allocate the woss sediment database creator
 
   bool m_bathyDbCreatorDebug; //!< enable/disable the debug prints of the woss Bathymetry database creator.
@@ -534,7 +538,7 @@ private:
   ::std::string m_bellhopBathyType;  //!< woss object configuration: Bellhop bathymetry type string
   ::std::string m_bathyMethod; //!< woss object configuration: Bathymetry write method string
   ::std::string m_bellhopAltimType;  //!< woss object configuration: Bellhop Altimetry type string
-  int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing
+  int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing, range [0,2]
   WossSimTime m_simTime;  //!< woss object configuration: woss simulation times (start and end sim times)
   woss::BellhopCreator *m_bellhopCreator; //!< the helper will automatically allocate the woss creator
   double m_boxDepth; //!< woss object configuration: maximum depth to trace rays to; deeper rays will be ignored
