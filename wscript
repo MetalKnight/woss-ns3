@@ -123,7 +123,7 @@ def build(bld):
     if 'woss-ns3' in bld.env['MODULES_NOT_BUILT']:
         return
 
-    module = bld.create_ns3_module('woss-ns3', ['network', 'energy', 'mobility', 'uan'])
+    module = bld.create_ns3_module('woss-ns3', ['netanim','network', 'energy', 'mobility', 'uan'])
     module.source = [
         'model/definitions/woss-location.cc',
         'model/definitions/woss-time-reference.cc',
