@@ -11,12 +11,12 @@ def options(opt):
     opt.add_option('--with-woss-library',
                    help=('Path to WOSS library, for NS-3 WOSS Integration Framework support'),
                    dest='with_woss_lib', default=None)
-    opt.add_option('--with-netcdf-include',
-                   help=('Path to NetCDF library include code, for WOSS Integration Framework support'),
-                   dest='with_netcdf_src', default=None)
-    opt.add_option('--with-netcdf-library',
-                   help=('Path to NetCDF library, for WOSS Integration Framework support'),
-                   dest='with_netcdf_lib', default=None)
+    opt.add_option('--with-netcdf-install',
+                   help=('Path to NetCDF legacy library install, for WOSS Integration Framework support'),
+                   dest='with_netcdf_install', default=None)
+    opt.add_option('--with-netcdf4-install',
+                   help=('Path to NetCDF4 and HDF5 library install, for WOSS Integration Framework support'),
+                   dest='with_netcdf4_install', default=None)
 
 def configure(conf):
 
@@ -48,24 +48,28 @@ def configure(conf):
         conf.msg("Checking for WOSS library location", ("%s (guessed)" % '/usr/lib'))
         conf.env['WITH_WOSS_LIB'] = os.path.abspath('/usr/lib')
 
-    if Options.options.with_netcdf_src:
-        conf.msg("Checking the given NetCDF source code path", ("%s (given)" % Options.options.with_netcdf_src))
-        if os.path.isdir(Options.options.with_netcdf_src):
-            conf.env['WITH_NETCDF_SRC'] = os.path.abspath(Options.options.with_netcdf_src)
+    if Options.options.with_netcdf4_install:
+        conf.msg("Checking the given NetCDF4 and HDF5 install path", ("%s (given)" % Options.options.with_netcdf4_install))
+        if (os.path.isdir(Options.options.with_netcdf4_install) and 
+              os.path.isdir(Options.options.with_netcdf4_install + '/include') and 
+              os.path.isdir(Options.options.with_netcdf4_install + '/lib')):
+            conf.env['WITH_NETCDF4_SRC'] = os.path.abspath(Options.options.with_netcdf4_install + '/include')
+            conf.env['WITH_NETCDF4_LIB'] = os.path.abspath(Options.options.with_netcdf4_install + '/lib')
         else:
-            conf.msg("NetCDF source code path", False)
+            conf.msg("NetCDF4 and HDF5 install path", False)
             config_error = "true"
-
-    if Options.options.with_netcdf_lib:
-        conf.msg("Checking the given NetCDF library path", ("%s (given)" % Options.options.with_netcdf_lib))
-        if os.path.isdir(Options.options.with_netcdf_lib):
-            conf.env['WITH_NETCDF_LIB'] = os.path.abspath(Options.options.with_netcdf_lib)
+    elif Options.options.with_netcdf_install:
+        conf.msg("Checking the given NetCDF legacy install path", ("%s (given)" % Options.options.with_netcdf_install))
+        if (os.path.isdir(Options.options.with_netcdf_install) and 
+              os.path.isdir(Options.options.with_netcdf_install + '/include') and 
+              os.path.isdir(Options.options.with_netcdf_install + '/lib')):
+            conf.env['WITH_NETCDF_SRC'] = os.path.abspath(Options.options.with_netcdf_install + '/include')
+            conf.env['WITH_NETCDF_LIB'] = os.path.abspath(Options.options.with_netcdf_install + '/lib')
         else:
-            conf.msg("NetCDF library path", False)
+            conf.msg("NetCDF legacy install path", False)
             config_error = "true"
     else:
-        conf.msg("Checking the NetCDF library path", ("%s (guessed)" % '/usr/lib'))
-        conf.env['WITH_NETCDF_LIB'] = os.path.abspath('/usr/lib')
+        conf.msg("NetCDF support", False)
 
     if config_error == "true":
         conf.report_optional_feature("WOSS", "WOSS Integration Framework", False,
@@ -102,22 +106,31 @@ def configure(conf):
         conf.env['WOSS'] = conf.check(mandatory=True, lib='WOSS', define_name='WOSS', libpath=conf.env['WITH_WOSS_LIB'] , uselib_store='WOSS',
                                               msg="Checking the given WOSS library")
 
-        if conf.env['WITH_NETCDF_SRC']:
-            conf.msg("NetCDF source code path", ("%s " % conf.env['WITH_NETCDF_SRC']))
- 
-            conf.env['DEFINES_NETCDF'] = ['WOSS_NETCDF_SUPPORT']
-            conf.env['INCLUDES_NETCDF'] = conf.env['WITH_NETCDF_SRC']
-            conf.env['LIBPATH_NETCDF'] = conf.env['WITH_NETCDF_LIB']
-            conf.env.append_value('NS3_MODULE_PATH', conf.env['LIBPATH_NETCDF'])
-            conf.env['LIB_NETCDF'] = ['netcdf_c++', 'netcdf']
+        if conf.env['WITH_NETCDF_SRC'] or conf.env['WITH_NETCDF4_SRC']:
+            if conf.env['WITH_NETCDF_SRC']:
+                conf.msg("NetCDF source code path", ("%s " % conf.env['WITH_NETCDF_SRC']))
+    
+                conf.env['DEFINES_NETCDF'] = ['WOSS_NETCDF_SUPPORT']
+                conf.env['INCLUDES_NETCDF'] = conf.env['WITH_NETCDF_SRC']
+                conf.env['LIBPATH_NETCDF'] = conf.env['WITH_NETCDF_LIB']
+                conf.env.append_value('NS3_MODULE_PATH', conf.env['LIBPATH_NETCDF'])
+                conf.env['LIB_NETCDF'] = ['netcdf_c++', 'netcdf']
 
-            conf.env['NETCDF'] = conf.check(mandatory=True, lib='netcdf_c++ netcdf', libpath=conf.env['WITH_NETCDF_LIB'], define_name='NETCDF_CPP', uselib_store='NETCDF_CPP', msg="Checking the given NETCDF library")
+                conf.env['NETCDF'] = conf.check(mandatory=True, lib='netcdf_c++ netcdf', libpath=conf.env['WITH_NETCDF_LIB'], define_name='NETCDF_CPP', uselib_store='NETCDF_CPP', msg="Checking the given NETCDF library")
+            else:
+                conf.msg("NetCDF4 and HDF5 source code path", ("%s " % conf.env['WITH_NETCDF4_SRC']))
+    
+                conf.env['DEFINES_NETCDF'] = ['WOSS_NETCDF_SUPPORT', 'WOSS_NETCDF4_SUPPORT']
+                conf.env['INCLUDES_NETCDF'] = conf.env['WITH_NETCDF4_SRC']
+                conf.env['LIBPATH_NETCDF'] = conf.env['WITH_NETCDF4_LIB']
+                conf.env.append_value('NS3_MODULE_PATH', conf.env['LIBPATH_NETCDF'])
+                conf.env['LIB_NETCDF'] = ['netcdf_c++4', 'netcdf', 'hdf5']
 
-            conf.report_optional_feature("WOSS", "WOSS Integration Framework", True,
-                  "WOSS correctly configured")
+                conf.env['NETCDF'] = conf.check(mandatory=True, lib='netcdf_c++4 netcdf hdf5', libpath=conf.env['WITH_NETCDF4_LIB'], define_name='NETCDF_CPP', uselib_store='NETCDF_CPP', msg="Checking the given NETCDF4 and HDF5 libraries")
         else:
-             conf.msg("Checking for NetCDF source location", False)
+            conf.msg("Checking for NetCDF/NetCDF4 source location", False)
 
+        conf.report_optional_feature("WOSS", "WOSS Integration Framework", True, "WOSS correctly configured")
 
 def build(bld):
     if 'woss-ns3' in bld.env['MODULES_NOT_BUILT']:
@@ -135,7 +148,7 @@ def build(bld):
         'helper/woss-helper.cc',
         ]
 
-    module_test = bld.create_ns3_module_test_library('woss')
+    module_test = bld.create_ns3_module_test_library('woss-ns3')
     module_test.source = [
         'test/woss-test.cc',
         ]
@@ -161,5 +174,5 @@ def build(bld):
             module_test.use.extend(['WOSS'])
 
     if (bld.env['ENABLE_EXAMPLES']):
-      bld.recurse('examples')
+        bld.recurse('examples')
 

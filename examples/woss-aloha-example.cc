@@ -66,6 +66,7 @@ Experiment::Experiment ()
     m_bytesTotal (0),
     m_dataMode ()
 {
+  //m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
 }
 
 void
@@ -77,15 +78,27 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
   wossHelper->SetAttribute ("ResDbFileName", StringValue ("woss-aloha-example-results.dat"));
   if (m_databasePath != "")
     {
-      wossHelper->SetAttribute ("SedimDbCoordFilePath", StringValue (m_databasePath + "/sea_floor/DECK41_coordinates.nc"));
-      wossHelper->SetAttribute ("SedimDbMarsdenFilePath", StringValue (m_databasePath + "/sea_floor/DECK41_mardsen_square.nc"));
-      wossHelper->SetAttribute ("SedimDbMarsdenOneFilePath", StringValue (m_databasePath + "/sea_floor/DECK41_mardsen_one_degree.nc"));
-      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/standard_depth/2WOA2009_SSP_April.nc"));
-      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_1D.nc"));
+#if defined (WOSS_NETCDF_SUPPORT)
+      wossHelper->SetAttribute ("SedimDbCoordFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_coordinates.nc"));
+      wossHelper->SetAttribute ("SedimDbMarsdenFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_mardsen_square.nc"));
+      wossHelper->SetAttribute ("SedimDbMarsdenOneFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_mardsen_one_degree.nc"));
+      wossHelper->SetAttribute ("BathyDbDebug", BooleanValue (false));
+#if defined (WOSS_NETCDF4_SUPPORT)
+      wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (4)); // 15 seconds, 2D netcdf format
+      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2019.nc"));
+      wossHelper->SetAttribute ("SspDbWoaDbType", IntegerValue (1)); // 2013 WOA DB Format
+      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2013/WOA2013_SSP_April.nc"));
+#else
+      wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
+      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_2D.nc"));
+      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2009/2WOA2009_SSP_April.nc"));
+#endif // defined (WOSS_NETCDF4_SUPPORT)
+#endif // defined (WOSS_NETCDF_SUPPORT)
     }
   wossHelper->SetAttribute ("WossCleanWorkDir", BooleanValue (false));
   wossHelper->SetAttribute ("WossWorkDirPath", StringValue ("./woss-aloha-example-output/work-dir/"));
   wossHelper->SetAttribute ("WossSimTime", StringValue ("1|10|2012|0|1|1|1|10|2012|0|1|1"));
+  wossHelper->SetAttribute ("WossBellhopArrSyntax", IntegerValue (2)); // Check woss::BellhopArrSyntax; 2 means bellhop output syntax >= march 2019
   wossHelper->SetAttribute ("WossManagerTimeEvoActive", BooleanValue (m_useTimeEvolution));
   wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (4));
   wossHelper->SetAttribute ("WossManagerUseMultithread", BooleanValue (m_useMultithread));

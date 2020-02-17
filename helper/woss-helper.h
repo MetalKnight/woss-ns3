@@ -31,13 +31,15 @@
 #include <time-arrival-definitions.h>
 #include <transducer-definitions.h>
 #include <transducer-handler.h>
-#include <bathymetry-gebco-db-creator.h>
 #include <res-pressure-bin-db-creator.h>
 #include <res-pressure-txt-db-creator.h>
 #include <res-time-arr-bin-db-creator.h>
 #include <res-time-arr-txt-db-creator.h>
+#if defined (WOSS_NETCDF_SUPPORT)
+#include <bathymetry-gebco-db-creator.h>
 #include <sediment-deck41-db-creator.h>
 #include <ssp-woa2005-db-creator.h>
+#endif // defined (WOSS_NETCDF_SUPPORT)
 #include <bellhop-creator.h>
 #include <woss-manager-simple.h>
 #include <woss-controller.h>
@@ -101,6 +103,7 @@ class WossHelper : public Object
 {
 
 public:
+
   WossHelper (); //!< Default constructor.
 
   virtual ~WossHelper (); //!< Default destructor.
@@ -480,6 +483,7 @@ private:
   woss::ResTimeArrBinDbCreator *m_resDbCreatorTimeArrBin; //!< the helper will automatically allocate the desired result database creator based on current configuration.
   woss::ResTimeArrTxtDbCreator *m_resDbCreatorTimeArrTxt; //!< the helper will automatically allocate the desired result database creator based on current configuration.
 
+#if defined (WOSS_NETCDF_SUPPORT)
   bool m_sedimDbCreatorDebug; //!< enable/disable the debug prints of the woss sediment database creator.
   bool m_sedimDbDebug; //!< enable/disable the debug prints of the woss sediment database.
   ::std::string m_sedimDbCoordFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with decimal degrees resolution
@@ -490,13 +494,17 @@ private:
   bool m_sspDbCreatorDebug; //!< enable/disable the debug prints of the woss SSP database creator.
   bool m_sspDbDebug; //!< enable/disable the debug prints of the woss SSP database.
   ::std::string m_sspDbFilePath; //!< setup the path of the woss monthly SSP database indexed by geographical coordinates
+#if defined (WOSS_NETCDF4_SUPPORT)
+  int m_sspWoaDbType; //!< WOA SSP Db Type: 0 = 2005 format Db, 1 2013 Format Db
+#endif // defined (WOSS_NETCDF_SUPPORT)
   woss::SspWoa2005DbCreator *m_sspDbCreator; //!< the helper will automatically allocate the woss sediment database creator
 
   bool m_bathyDbCreatorDebug; //!< enable/disable the debug prints of the woss Bathymetry database creator.
   bool m_bathyDbDebug; //!< enable/disable the debug prints of the woss Bathymetry database (GEBCO).
-  bool m_bathyDbUseThirtySecsPrec; //!< setup the the GEBCO database format resolution: thirty second of arc, or one minute of arc (see GEBCO formats).
+  int m_bathyDbGebcoFormat; //!< setup the the GEBCO database format: 0=1D one minute, 1=1D 30 seconds, 2=2D one minute, 3=2D 30 seconds, 4=2D 15 seconds
   ::std::string m_bathyDbFilePath; //!< setup the path of the woss GEBCO database
   woss::BathyGebcoDbCreator *m_bathyDbCreator; //!< the helper will automatically allocate the woss GEBCO bathymetry db creator
+#endif // defined (WOSS_NETCDF_SUPPORT)
 
   bool m_wossDbManagerDebug; //!< enable/disable the debug prints of the woss DB manager object.
 
@@ -530,7 +538,7 @@ private:
   ::std::string m_bellhopBathyType;  //!< woss object configuration: Bellhop bathymetry type string
   ::std::string m_bathyMethod; //!< woss object configuration: Bathymetry write method string
   ::std::string m_bellhopAltimType;  //!< woss object configuration: Bellhop Altimetry type string
-  int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing
+  int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing, range [0,2]
   WossSimTime m_simTime;  //!< woss object configuration: woss simulation times (start and end sim times)
   woss::BellhopCreator *m_bellhopCreator; //!< the helper will automatically allocate the woss creator
   double m_boxDepth; //!< woss object configuration: maximum depth to trace rays to; deeper rays will be ignored
