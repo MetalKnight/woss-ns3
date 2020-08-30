@@ -99,6 +99,7 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
   wossHelper->SetAttribute ("WossWorkDirPath", StringValue ("./woss-aloha-example-output/work-dir/"));
   wossHelper->SetAttribute ("WossSimTime", StringValue ("1|10|2012|0|1|1|1|10|2012|0|1|1"));
   wossHelper->SetAttribute ("WossBellhopArrSyntax", IntegerValue (2)); // Check woss::BellhopArrSyntax; 2 means bellhop output syntax >= march 2019
+  wossHelper->SetAttribute ("WossBellhopShdSyntax", IntegerValue (1));
   wossHelper->SetAttribute ("WossManagerTimeEvoActive", BooleanValue (m_useTimeEvolution));
   wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (4));
   wossHelper->SetAttribute ("WossManagerUseMultithread", BooleanValue (m_useMultithread));

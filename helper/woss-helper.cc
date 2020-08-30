@@ -60,6 +60,9 @@
 #define WH_BELLHOP_ARR_SYNTAX_DEFAULT (2)
 #define WH_BELLHOP_ARR_SYNTAX_MIN (0)
 #define WH_BELLHOP_ARR_SYNTAX_MAX (2)
+#define WH_BELLHOP_SHD_SYNTAX_DEFAULT (1)
+#define WH_BELLHOP_SHD_SYNTAX_MIN (0)
+#define WH_BELLHOP_SHD_SYNTAX_MAX (1)
 #define WH_BOX_DEPTH (-3000.0)
 #define WH_BOX_RANGE (-3000.0)
 #define WH_GEBCO_FORMAT_DEFAULT (3)
@@ -236,6 +239,7 @@ WossHelper::WossHelper ()
     m_bathyMethod(WH_BATHYMETRY_METHOD_DEFAULT),
     m_bellhopAltimType (WH_ALTIMETRY_TYPE_DEFAULT),
     m_bellhopArrSyntax (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
+    m_bellhopShdSyntax (WH_BELLHOP_SHD_SYNTAX_DEFAULT),
     m_simTime (),
     m_bellhopCreator (NULL),
     m_boxDepth (WH_BOX_DEPTH),
@@ -518,6 +522,7 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
   NS_ASSERT ((m_simTime.start_time.isValid () == true) && (m_simTime.end_time.isValid ()) );
   m_bellhopCreator->setSimTime (m_simTime);
   m_bellhopCreator->setBellhopArrSyntax ((woss::BellhopArrSyntax)m_bellhopArrSyntax);
+  m_bellhopCreator->setBellhopShdSyntax ((woss::BellhopShdSyntax)m_bellhopShdSyntax);
   m_bellhopCreator->setBoxDepth(m_boxDepth);
   m_bellhopCreator->setBoxRange(m_boxRange);
   m_wossController->setWossCreator (m_bellhopCreator);
@@ -1547,6 +1552,11 @@ WossHelper::GetTypeId ()
                    IntegerValue (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
                    MakeIntegerAccessor (&WossHelper::m_bellhopArrSyntax),
                    MakeIntegerChecker<int> (WH_BELLHOP_ARR_SYNTAX_MIN, WH_BELLHOP_ARR_SYNTAX_MAX) )
+    .AddAttribute ("WossBellhopShdSyntax", 
+                   "Syntax to be used during bellhop arr file parsing, range [0-1]",
+                   IntegerValue (WH_BELLHOP_SHD_SYNTAX_DEFAULT),
+                   MakeIntegerAccessor (&WossHelper::m_bellhopShdSyntax),
+                   MakeIntegerChecker<int> (WH_BELLHOP_SHD_SYNTAX_MIN, WH_BELLHOP_SHD_SYNTAX_MAX) )
     .AddAttribute ("WossManagerDebug",
                    "A boolean that enables or disables the debug screen output of WossManager object",
                    BooleanValue (WH_DEBUG_DEFAULT),

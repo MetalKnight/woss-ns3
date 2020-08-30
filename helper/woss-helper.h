@@ -539,6 +539,7 @@ private:
   ::std::string m_bathyMethod; //!< woss object configuration: Bathymetry write method string
   ::std::string m_bellhopAltimType;  //!< woss object configuration: Bellhop Altimetry type string
   int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing, range [0,2]
+  int m_bellhopShdSyntax; //!< woss object configration: Bellhop Shd file syntax to be used during .shd file parsing, range [0,1]
   WossSimTime m_simTime;  //!< woss object configuration: woss simulation times (start and end sim times)
   woss::BellhopCreator *m_bellhopCreator; //!< the helper will automatically allocate the woss creator
   double m_boxDepth; //!< woss object configuration: maximum depth to trace rays to; deeper rays will be ignored
