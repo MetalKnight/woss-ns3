@@ -87,7 +87,7 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (4)); // 15 seconds, 2D netcdf format
       wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2019.nc"));
       wossHelper->SetAttribute ("SspDbWoaDbType", IntegerValue (1)); // 2013 WOA DB Format
-      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2013/WOA2013_SSP_April.nc"));
+      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2018/WOA2018_SSP_April.nc"));
 #else
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
       wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_2D.nc"));
