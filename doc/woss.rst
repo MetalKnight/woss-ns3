@@ -74,16 +74,24 @@ to use geographical coordinates
 How to Install
 ==============
 #. install Bellhop [1]_ and put the binary path in the ``$PATH`` environment;
-#. install the NETCDF [6]_ library if you want to use the WOSS environmental databases;
-#. install WOSS, with multithread support (mandatory). |ns2| and Ns-Miracle [4]_ support are optional. NETCDF support must be installed depending on previous step.
+#. install the NetCDF legacy or NetCDF4 + HDF5 [6]_ libraries if you want to use the WOSS environmental databases;
+#. install WOSS, with multithread support (mandatory). |ns2| and Ns-Miracle [4]_ support are optional. 
+   NetCDF support must be installed depending on previous step.
 #. for more info on the previous step please see [7]_ 
-#. compile NS3 with WOSS support enabled. Run: ``./waf -d debug --enable-tests --enable-examples --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf-lib=<netcdf_installed_lib_path> --with-netcdf-include=<netcdf_installed_include_path> configure``
+#. clone this repository into the ``<ns3-dir>/src/`` path
+#. example of installation with NetCDF legacy: 
+   ``./waf -d debug --enable-tests --enable-examples --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf-lib=<netcdf_installed_lib_path> --with-netcdf-include=<netcdf_installed_include_path> configure``
+#. example of installation with NetCDF4 + HDF5, pay attention to the ``CXXFLAGS`` inline redefinition 
+   due to a unresolved NetCDF-C++4 API warning:
+   ``./waf configure --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf4-install=<netcdf4_and_hdf5_installed_path> CXXFLAGS="-Wall -Werror -Wno-unused-variable``
+#. for info on how to install all the required libraries with the suggested paths, please check [7]_
 
 where:
 #. ``--with-woss-source=<woss_source_path>`` is mandatory
 #. ``--with-woss-library=<woss_lib_path>`` is mandatory
 #. ``--with-netcdf-lib=<netcdf_installed_lib_path>`` is optional
 #. ``--with-netcdf-include=<netcdf_installed_include_path>`` is optional
+#. ``--with-netcdf4-install=<netcdf4_and_hdf5_installed_path>`` is optional
 
 Future Work
 ===========
@@ -99,7 +107,7 @@ References
 .. [3] WOSS Technical Description, URL: http://telecom.dei.unipd.it/ns/woss/doxygen
 .. [4] NS-Miracle source code, URL: http://telecom.dei.unipd.it/pages/read/58
 .. [5] University of Padua list of publications on Underwater acoustic Networks; URL: http://telecom.dei.unipd.it/pages/read/75/
-.. [6] NETCDF library, URL: http://www.unidata.ucar.edu/downloads/netcdf/index.jsp
+.. [6] NetCDF library, URL: http://www.unidata.ucar.edu/downloads/netcdf/index.jsp
 .. [7] WOSS installation how-to, URL: URL: http://telecom.dei.unipd.it/ns/woss/doxygen/installation.html
 
 Usage
