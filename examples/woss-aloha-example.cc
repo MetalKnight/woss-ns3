@@ -79,15 +79,16 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
   if (m_databasePath != "")
     {
 #if defined (WOSS_NETCDF_SUPPORT)
-      wossHelper->SetAttribute ("SedimDbCoordFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_coordinates.nc"));
-      wossHelper->SetAttribute ("SedimDbMarsdenFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_mardsen_square.nc"));
-      wossHelper->SetAttribute ("SedimDbMarsdenOneFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_mardsen_one_degree.nc"));
+      wossHelper->SetAttribute ("SedimDbCoordFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_V2_coordinates.nc"));
+      wossHelper->SetAttribute ("SedimDbMarsdenFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_V2_marsden_square.nc"));
+      wossHelper->SetAttribute ("SedimDbMarsdenOneFilePath", StringValue (m_databasePath + "/seafloor_sediment/DECK41_V2_marsden_one_degree.nc"));
       wossHelper->SetAttribute ("BathyDbDebug", BooleanValue (false));
 #if defined (WOSS_NETCDF4_SUPPORT)
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (4)); // 15 seconds, 2D netcdf format
       wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2020.nc"));
       wossHelper->SetAttribute ("SspDbWoaDbType", IntegerValue (1)); // 2013 WOA DB Format
       wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2018/WOA2018_SSP_April.nc"));
+      wossHelper->SetAttribute ("SedimentDbDeck41DbType", IntegerValue (1)); // DECK41 V2 database data format
 #else
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
       wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2014_2D.nc"));
