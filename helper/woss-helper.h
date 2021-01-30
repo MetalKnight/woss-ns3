@@ -486,6 +486,9 @@ private:
 #if defined (WOSS_NETCDF_SUPPORT)
   bool m_sedimDbCreatorDebug; //!< enable/disable the debug prints of the woss sediment database creator.
   bool m_sedimDbDebug; //!< enable/disable the debug prints of the woss sediment database.
+#if defined (WOSS_NETCDF4_SUPPORT)
+  int m_sedimDbDeck41DbType; //!< set the DECK41 database data format type. 0 = V1 data format, 1 = V2 data format
+#endif // defined (WOSS_NETCDF4_SUPPORT)
   ::std::string m_sedimDbCoordFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with decimal degrees resolution
   ::std::string m_sedimDbMarsdenFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with marsden square resolution
   ::std::string m_sedimDbMarsdenOneFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with marsden one square resolution

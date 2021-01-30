@@ -72,6 +72,9 @@
 #define WH_WOA_DB_TYPE_DEFAULT (1)
 #define WH_WOA_DB_TYPE_MIN (0)
 #define WH_WOA_DB_TYPE_MAX (1)
+#define WH_SEDIMENT_DECK41_FORMAT_DEFAULT (1)
+#define WH_SEDIMENT_DECK41_FORMAT_MIN (0)
+#define WH_SEDIMENT_DECK41_FORMAT_MAX (1)
 #endif // defined (WOSS_NETCDF_SUPPORT)
 
 namespace ns3 {
@@ -191,6 +194,9 @@ WossHelper::WossHelper ()
 #if defined (WOSS_NETCDF_SUPPORT)
     m_sedimDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sedimDbDebug (WH_DEBUG_DEFAULT),
+#if defined (WOSS_NETCDF4_SUPPORT)
+    m_sedimDbDeck41DbType(WH_SEDIMENT_DECK41_FORMAT_DEFAULT),
+#endif // defined (WOSS_NETCDF4_SUPPORT)
     m_sedimDbCoordFilePath (WH_STRING_DEFAULT),
     m_sedimDbMarsdenFilePath (WH_STRING_DEFAULT),
     m_sedimDbMarsdenOneFilePath (WH_STRING_DEFAULT),
@@ -409,6 +415,9 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
       m_sedimDbCreator->setDeck41MarsdenOnePathName (m_sedimDbMarsdenOneFilePath);
       m_sedimDbCreator->setDebug (m_sedimDbCreatorDebug);
       m_sedimDbCreator->setWossDebug (m_sedimDbDebug);
+#if defined (WOSS_NETCDF4_SUPPORT)
+      m_sedimDbCreator->setDeck41DbType ((woss::DECK41DbType)m_sedimDbDeck41DbType);
+#endif // defined (WOSS_NETCDF4_SUPPORT)
 
       m_wossController->setSedimentDbCreator (m_sedimDbCreator);
     }
@@ -1339,6 +1348,13 @@ WossHelper::GetTypeId ()
                    BooleanValue (WH_DEBUG_DEFAULT),
                    MakeBooleanAccessor (&WossHelper::m_sedimDbDebug),
                    MakeBooleanChecker () )
+#if defined (WOSS_NETCDF4_SUPPORT)
+    .AddAttribute ("SedimentDbDeck41DbType",
+                   "SSP WOA Db Type: 0 = V1 Format Db, 1 = V2 Format Db",
+                   IntegerValue (WH_SEDIMENT_DECK41_FORMAT_DEFAULT),
+                   MakeIntegerAccessor (&WossHelper::m_sedimDbDeck41DbType),
+                   MakeIntegerChecker<int> (WH_SEDIMENT_DECK41_FORMAT_MIN, WH_SEDIMENT_DECK41_FORMAT_MAX ) )
+#endif // defined (WOSS_NETCDF4_SUPPORT)
     .AddAttribute ("SedimDbCoordFilePath",
                    "Sediment Db will read the coordinates database from this file (full path required)",
                    StringValue (WH_STRING_DEFAULT),
