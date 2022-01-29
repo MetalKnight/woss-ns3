@@ -1,16 +1,14 @@
-set(name woss-aloha-example)
-set(source_files ${name}.cc)
-set(header_files ${name}.h)
-set(libraries_to_link
+build_lib_example(
+  NAME woss-aloha-example
+  SOURCE_FILES woss-aloha-example.cc
+  HEADER_FILES woss-aloha-example.h
+  LIBRARIES_TO_LINK
     ${libnetanim}
     ${libinternet}
     ${libmobility}
     ${libstats}
     ${libapplications}
     ${libuan}
-    ${woss_lib}
+    ${WOSS_LIBRARIES}
     ${libwoss-ns3}
-)
-build_contrib_example(
-  "${name}" "${source_files}" "${header_files}" "${libraries_to_link}"
 )
