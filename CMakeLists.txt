@@ -50,7 +50,7 @@ find_external_library(
   SEARCH_PATHS ${NS3_WITH_WOSS_LIBRARY}
   PATH_SUFFIXES /woss /woss_def /woss_db /woss/woss_def /woss/woss_db
 )
-message("${WOSS_INCLUDE_DIRS}")
+
 if(NOT
    ${WOSS_FOUND}
 )
