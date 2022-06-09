@@ -45,7 +45,10 @@ WossLocation::getLocation ()
 {
   Vector vector = m_mobModel->GetPosition ();
 
-  return (woss::CoordZ::getCoordZFromCartesianCoords (vector.x, vector.y, vector.z));
+  return (woss::CoordZ::getCoordZFromCartesianCoords (vector.x, 
+                                                      vector.y, 
+                                                      vector.z, 
+                                                      woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84));
 }
 
 

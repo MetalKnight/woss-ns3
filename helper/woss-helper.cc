@@ -87,27 +87,35 @@ Vector
 CreateVectorFromCoords (double latitude, double longitude, double depth)
 {
   woss::CoordZ coordz (latitude, longitude, depth);
+  woss::CoordZ::CartCoords currCartCoords = coordz.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
 
-  return Vector (coordz.getCartX (), coordz.getCartY (), coordz.getCartZ ());
+  return Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 Vector
-CreateVectorFromCoordZ (woss::CoordZ coordz)
+CreateVectorFromCoordZ (const woss::CoordZ &coordz)
 {
-  return Vector (coordz.getCartX (), coordz.getCartY (), coordz.getCartZ ());
+  woss::CoordZ::CartCoords currCartCoords = coordz.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  return Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 woss::CoordZ
 CreateCoordZFromVector (Vector vect)
 {
-  return (woss::CoordZ::getCoordZFromCartesianCoords (vect.x, vect.y, vect.z));
+  return (woss::CoordZ::getCoordZFromCartesianCoords (vect.x, 
+                                                      vect.y, 
+                                                      vect.z, 
+                                                      woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84));
 }
 
 
 woss::Coord
 CreateCoordFromVector (Vector vect)
 {
-  woss::CoordZ coordZtemp = woss::CoordZ::getCoordZFromCartesianCoords (vect.x, vect.y, vect.z);
+  woss::CoordZ coordZtemp = woss::CoordZ::getCoordZFromCartesianCoords (vect.x, 
+                                                                        vect.y, 
+                                                                        vect.z, woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
   return (woss::Coord (coordZtemp.getLatitude (), coordZtemp.getLongitude ()));
 }
 

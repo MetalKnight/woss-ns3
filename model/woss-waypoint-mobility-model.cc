@@ -122,11 +122,15 @@ WossWaypointMobilityModel::Update (void) const
 
       woss::CoordZ cCurrent = woss::CoordZ::getCoordZFromCartesianCoords (m_current.position.x,
                                                                           m_current.position.y,
-                                                                          m_current.position.z);
+                                                                          m_current.position.z,
+                                                                          woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84
+                                                                         );
 
       woss::CoordZ cNext = woss::CoordZ::getCoordZFromCartesianCoords (m_next.position.x,
                                                                        m_next.position.y,
-                                                                       m_next.position.z);
+                                                                       m_next.position.z,
+                                                                       woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84
+                                                                      );
 
       NS_LOG_DEBUG ("cCurrent=" << cCurrent << "; cNext=" << cNext);
 
@@ -157,9 +161,11 @@ WossWaypointMobilityModel::Update (void) const
 
       NS_LOG_DEBUG ("czNew=" << czNew);
 
-      m_current.position.x = czNew.getCartX ();
-      m_current.position.y = czNew.getCartY ();
-      m_current.position.z = czNew.getCartZ ();
+      woss::CoordZ::CartCoords currCartCoords = czNew.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+      m_current.position.x = currCartCoords.getX ();
+      m_current.position.y = currCartCoords.getY ();
+      m_current.position.z = currCartCoords.getZ ();
       m_current.time = now;
 
       NS_LOG_DEBUG ("m_current=" << m_current);

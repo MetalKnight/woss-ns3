@@ -53,14 +53,16 @@ WossListPositionAllocator::WossListPositionAllocator ()
 }
 
 void
-WossListPositionAllocator::Add (woss::CoordZ coords)
+WossListPositionAllocator::Add (const woss::CoordZ &coords)
 {
   NS_LOG_FUNCTION (this);
 
   NS_LOG_DEBUG ("latitude=" << coords.getLatitude () << "; longitude=" << coords.getLongitude ()
                             << "; depth=" << coords.getDepth ());
 
-  m_listAllocator.Add (Vector (coords.getCartX (), coords.getCartY (), coords.getCartZ ()) );
+  woss::CoordZ::CartCoords currCartCoords = coords.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  m_listAllocator.Add (Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ()) );
 }
 
 Vector
@@ -240,8 +242,10 @@ WossGridPositionAllocator::GetNext (void) const
 
           NS_LOG_DEBUG ("start coordinates=" << startCoord);
 
-          lat = woss::Coord::getCoordFromBearing (startCoord, 0.0, (m_DeltaLat * (m_current % m_n)), m_Depth).getLatitude ();
-          lon = woss::Coord::getCoordFromBearing (startCoord, 0.0, (m_DeltaLon * (m_current / m_n)), m_Depth).getLongitude ();
+          lat = woss::Coord::getCoordFromBearing (startCoord, 0.0, 
+                                                  (m_DeltaLat * (m_current % m_n)), m_Depth).getLatitude ();
+          lon = woss::Coord::getCoordFromBearing (startCoord, 0.0, 
+                                                  (m_DeltaLon * (m_current / m_n)), m_Depth).getLongitude ();
 
           break;
 
@@ -255,7 +259,9 @@ WossGridPositionAllocator::GetNext (void) const
 
   woss::CoordZ currCoord (lat, lon, m_Depth);
 
-  return Vector (currCoord.getCartX (), currCoord.getCartY (), currCoord.getCartZ ());
+  woss::CoordZ::CartCoords currCartCoords = currCoord.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  return Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 int64_t
@@ -335,7 +341,10 @@ WossRandomRectanglePositionAllocator::GetNext (void) const
                             << "; depth = " << m_Depth << " [m]");
 
   woss::CoordZ coordz (lat, lon, m_Depth);
-  return Vector (coordz.getCartX (), coordz.getCartY (), coordz.getCartZ ());
+
+  woss::CoordZ::CartCoords currCartCoords = coordz.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  return Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 int64_t
@@ -413,7 +422,9 @@ WossRandomBoxPositionAllocator::GetNext (void) const
 
   woss::CoordZ coordz (lat, lon, ::std::abs (depth));
 
-  return Vector (coordz.getCartX (), coordz.getCartY (), coordz.getCartZ ());
+  woss::CoordZ::CartCoords currCartCoords = coordz.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  return Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 int64_t
@@ -520,9 +531,12 @@ WossRandomDiscPositionAllocator::GetNext (void) const
   woss::CoordZ coordz (woss::Coord::getCoordFromBearing (start_coord, bearing * M_PI / 180.0, range, m_Depth), m_Depth);
 
   NS_LOG_DEBUG ("Disc position latitude=" << coordz.getLatitude ()
-                                          << ", longitude=" << coordz.getLongitude () << "; depth=" << coordz.getDepth () );
+                                          << ", longitude=" << coordz.getLongitude () 
+                                          << "; depth=" << coordz.getDepth () );
 
-  return Vector ( coordz.getCartX (), coordz.getCartY (), coordz.getCartZ ());
+  woss::CoordZ::CartCoords currCartCoords = coordz.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  return Vector ( currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 int64_t
@@ -621,9 +635,12 @@ WossUniformDiscPositionAllocator::GetNext (void) const
   woss::CoordZ coordz (woss::Coord::getCoordFromBearing (startCoord, bearing, range, m_Depth), m_Depth);
 
   NS_LOG_DEBUG ("Disc position latitude=" << coordz.getLatitude ()
-                                          << ", longitude=" << coordz.getLongitude () << "; depth=" << coordz.getDepth () );
+                                          << ", longitude=" << coordz.getLongitude () 
+                                          << "; depth=" << coordz.getDepth () );
 
-  return Vector (coordz.getCartX (), coordz.getCartY (), coordz.getCartZ ());
+  woss::CoordZ::CartCoords currCartCoords = coordz.getCartCoords (woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84);
+
+  return Vector (currCartCoords.getX (), currCartCoords.getY (), currCartCoords.getZ ());
 }
 
 
