@@ -46,9 +46,7 @@ endif()
 find_external_library(
   DEPENDENCY_NAME WOSS
   LIBRARY_NAME WOSS
-  HEADER_NAMES location-definitions.h woss-manager.h woss-db-manager.h
   SEARCH_PATHS ${NS3_WITH_WOSS_LIBRARY}
-  PATH_SUFFIXES /woss /woss_def /woss_db /woss/woss_def /woss/woss_db
 )
 
 if(NOT
@@ -89,8 +87,6 @@ add_definitions(
 
 include_directories(${WOSS_INCLUDE_DIRS})
 
-# At this point we should have either the directory to woss sources, the
-# woss_lib or the cdf_lib So we can start working on the woss-ns3 module
 
 build_lib(
   LIBNAME woss-ns3
