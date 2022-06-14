@@ -47,8 +47,6 @@ find_external_library(
     /woss/woss_db
     /build
     /build/lib
-    WIDEN_HEADER_SEARCH_SCOPE
-    TRUE # The libraries can be installed, but headers are kept separately
 )
 
 set(woss_libraries)
