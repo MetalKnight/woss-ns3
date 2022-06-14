@@ -4,7 +4,7 @@ set(NS3_WITH_WOSS_SOURCE
       PATH
       "Path to WOSS source directory, for NS-3 WOSS Integration Framework support"
 )
-set(NS3_WITH_WOSS_LIB
+set(NS3_WITH_WOSS_LIBRARY
     ""
     CACHE
       PATH
