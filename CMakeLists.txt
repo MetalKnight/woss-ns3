@@ -105,7 +105,7 @@ else()
   if(${NETCDF_FOUND})
     message(STATUS "NETCDF was found.")
     add_definitions(-DWOSS_NETCDF_SUPPORT)
-    include_directories(${NETCDF4_INCLUDE_DIRS})
+    include_directories(${NETCDF_INCLUDE_DIRS})
     set(netcdf_libraries
         ${NETCDF_LIBRARIES}
     )
