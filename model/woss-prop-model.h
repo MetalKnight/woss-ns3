@@ -104,7 +104,7 @@ public:
    * greater than the threshold will be used as delay.
    * \returns the delay in seconds
    */
-  virtual Time GetDelay (woss::CoordZ a, woss::CoordZ b, UanTxMode mode, double chAttThresDb);
+  virtual Time GetDelay (const woss::CoordZ &a, const woss::CoordZ &b, UanTxMode mode, double chAttThresDb);
 
 
 protected:

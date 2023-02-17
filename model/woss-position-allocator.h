@@ -53,7 +53,7 @@ public:
    *
    * \param coords position in geographic coordinates (decimal degrees)
    */
-  void Add (woss::CoordZ coords);
+  void Add (const woss::CoordZ &coords);
 
   /**
    * \returns the Vector position in cartesian coordinates

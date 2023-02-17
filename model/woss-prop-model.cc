@@ -251,7 +251,10 @@ WossPropModel::CreateCoordZ (Ptr<MobilityModel> mobModel)
 
   Vector vect = mobModel->GetPosition ();
 
-  return (woss::CoordZ::getCoordZFromCartesianCoords (vect.x, vect.y, vect.z));
+  return (woss::CoordZ::getCoordZFromCartesianCoords (vect.x, 
+                                                      vect.y, 
+                                                      vect.z, 
+                                                      woss::CoordZ::CoordZSpheroidType::COORDZ_WGS84));
 }
 
 woss::CoordZPairVect
@@ -270,7 +273,7 @@ WossPropModel::CreateCoordzPairVector ( Ptr<MobilityModel> tx, MobModelVector& r
 }
 
 Time
-WossPropModel::GetDelay (woss::CoordZ a, woss::CoordZ b, UanTxMode mode, double chAttThresDb)
+WossPropModel::GetDelay (const woss::CoordZ &a, const woss::CoordZ &b, UanTxMode mode, double chAttThresDb)
 {
   NS_LOG_FUNCTION (this);
 

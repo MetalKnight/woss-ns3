@@ -575,7 +575,7 @@ private:
 ::std::istream &operator >> (::std::istream &is, WossSimTime &simeTime);
 
 /**
- * Helper function that creates a Vector converted from geographic coordinates
+ * Helper function that creates a Vector cartesian coordinates in WGS84 format converted from geographic coordinates
  * \param latitude latitude in decimal degrees
  * \param longitude longitude in decimal degrees
  * \maram depth depth in meters
@@ -584,21 +584,21 @@ private:
 Vector CreateVectorFromCoords (double latitude, double longitude, double depth);
 
 /**
- * Helper function that creates a Vector converted from geographic coordinates woss::CoordZ
+ * Helper function that creates a Vector cartesian coordinates in WGS84 format converted from geographic coordinates
  * \param coordz woss::CoordZ object
  * \returns a ns3::Vector
  */
-Vector CreateVectorFromCoordZ (woss::CoordZ coordz);
+Vector CreateVectorFromCoordZ (const woss::CoordZ &coordz);
 
 /**
- * Helper function that creates a CoordZ converted from cartesian coordinates
+ * Helper function that creates a CoordZ converted from cartesian coordinates in WGS84 format
  * \param vect a valid ns3::Vector
  * \returns a woss::CoordZ
  */
 woss::CoordZ CreateCoordZFromVector (Vector vect);
 
 /**
- * Helper function that creates a Coord object converted from cartesian coordinates
+ * Helper function that creates a Coord object converted from cartesian coordinates in WGS84 format
  * \param vect a valid ns3::Vector
  * \returns a woss::Coord
  */
