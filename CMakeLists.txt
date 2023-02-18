@@ -1,13 +1,16 @@
 set(NS3_WITH_WOSS_SOURCE
     ""
-    CACHE PATH
-          "Path to WOSS source code, for WOSS Integration Framework support"
+    CACHE
+      PATH
+      "Path to WOSS source directory, for NS-3 WOSS Integration Framework support"
 )
 set(NS3_WITH_WOSS_LIBRARY
     ""
-    CACHE PATH
-          "Path to WOSS library, for NS-3 WOSS Integration Framework support"
+    CACHE
+      PATH
+      "Path to WOSS library directory, for NS-3 WOSS Integration Framework support"
 )
+
 set(NS3_WITH_NETCDF_INSTALL
     ""
     CACHE
@@ -27,34 +30,35 @@ set(ENABLE_WOSS
           "ON if WOSS can be built"
 )
 
-if(NS3_WITH_WOSS_SOURCE)
-  if(NOT
-     (EXISTS
-      ${NS3_WITH_WOSS_SOURCE})
-  )
-    message(STATUS "WOSS source was not found in ${NS3_WITH_WOSS_SOURCE}")
-  else()
-    message(STATUS "WOSS source was found")
-    set(NS3_WOSS
-        "ON"
-        CACHE INTERNAL
-              "ON if woss-ns3 can be built"
-    )
-  endif()
-endif()
-
 find_external_library(
   DEPENDENCY_NAME WOSS
   LIBRARY_NAME WOSS
-  SEARCH_PATHS ${NS3_WITH_WOSS_LIBRARY}
+  HEADER_NAMES
+    location-definitions.h
+    woss-manager.h
+    woss-db-manager.h
+  SEARCH_PATHS ${NS3_WITH_WOSS_SOURCE}
+               ${NS3_WITH_WOSS_LIBRARY}
+  PATH_SUFFIXES
+    /woss
+    /woss_def
+    /woss_db
+    /woss/woss_def
+    /woss/woss_db
+    /build
+    /build/lib
 )
 
+set(woss_libraries)
+
+# If we can't find WOSS sources or library, don't process this module
 if(NOT
    ${WOSS_FOUND}
 )
-  message(STATUS "WOSS library was not found")
-  # If we can't find WOSS sources or library, don't process this module
-  message(STATUS "Skipping contrib/woss-ns3")
+  message(
+    ${HIGHLIGHTED_STATUS}
+    "Skipping contrib/woss-ns3"
+  )
   return()
 else()
   message(STATUS "WOSS library was found: ${WOSS_LIBRARIES}")
@@ -63,30 +67,57 @@ else()
       CACHE INTERNAL
             "ON if woss-ns3 can be built"
   )
+  include_directories(${WOSS_INCLUDE_DIRS})
+  set(woss_libraries
+      ${WOSS_LIBRARIES}
+  )
 endif()
 
+# Process optional NETCDF libraries
 find_external_library(
   DEPENDENCY_NAME NETCDF
-  LIBRARY_NAME netcdf
-  SEARCH_PATHS ${NS3_WITH_NETCDF4_INSTALL}
-               ${NS3_WITH_NETCDF_INSTALL}
+  LIBRARY_NAME netcdf_c++
+               netcdf
+  SEARCH_PATHS ${NS3_WITH_NETCDF_INSTALL}
 )
 
-if(NOT
-   ${NETCDF_FOUND}
+find_external_library(
+  DEPENDENCY_NAME NETCDF4
+  LIBRARY_NAMES
+    netcdf_c++4
+    netcdf
+    hdf5
+  SEARCH_PATHS ${NS3_WITH_NETCDF4_INSTALL}
 )
-  message(STATUS "NETCDF was not found")
+
+set(netcdf_libraries)
+if(${NETCDF4_FOUND})
+  message(STATUS "NETCDF4 was found.")
+  add_definitions(
+    -DWOSS_NETCDF_SUPPORT
+    -DWOSS_NETCDF4_SUPPORT
+  )
+  include_directories(${NETCDF4_INCLUDE_DIRS})
+  set(netcdf_libraries
+      ${NETCDF4_LIBRARIES}
+  )
 else()
-  message(STATUS "NETCDF was found: ${NETCDF_LIBRARIES}")
+  if(${NETCDF_FOUND})
+    message(STATUS "NETCDF was found.")
+    add_definitions(-DWOSS_NETCDF_SUPPORT)
+    include_directories(${NETCDF_INCLUDE_DIRS})
+    set(netcdf_libraries
+        ${NETCDF_LIBRARIES}
+    )
+  else()
+    message(STATUS "NETCDF was not found")
+  endif()
 endif()
 
 add_definitions(
   -DNS3_WOSS_SUPPORT
   -DWOSS_MULTITHREAD
 )
-
-include_directories(${WOSS_INCLUDE_DIRS})
-
 
 build_lib(
   LIBNAME woss-ns3
@@ -114,7 +145,8 @@ build_lib(
     ${libenergy}
     ${libmobility}
     ${libuan}
-    ${WOSS_LIBRARIES}
-    ${NETCDF_LIBRARIES}
+    ${woss_libraries}
+    ${netcdf_libraries}
   TEST_SOURCES test/woss-test.cc
 )
+ 
