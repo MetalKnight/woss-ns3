@@ -76,18 +76,31 @@ endif()
 # Process optional NETCDF libraries
 find_external_library(
   DEPENDENCY_NAME NETCDF
+  HEADER_NAMES
+    netcdf.h
+    ncFile.h
   LIBRARY_NAME netcdf_c++
                netcdf
   SEARCH_PATHS ${NS3_WITH_NETCDF_INSTALL}
+  PATH_SUFFIXES
+    /include
+    /lib
 )
 
 find_external_library(
   DEPENDENCY_NAME NETCDF4
+  HEADER_NAMES
+    hdf5.h
+    netcdf.h
+    ncFile.h
   LIBRARY_NAMES
     netcdf_c++4
     netcdf
     hdf5
   SEARCH_PATHS ${NS3_WITH_NETCDF4_INSTALL}
+  PATH_SUFFIXES
+    /include
+    /lib
 )
 
 set(netcdf_libraries)
@@ -149,4 +162,4 @@ build_lib(
     ${netcdf_libraries}
   TEST_SOURCES test/woss-test.cc
 )
- 
+

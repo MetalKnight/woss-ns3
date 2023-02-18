@@ -116,7 +116,7 @@ WossChannel::TxPacket (Ptr<UanTransducer> src, Ptr<Packet> packet,
     {
       tempRxMobility = i->first->GetNode ()->GetObject<MobilityModel> ();
 
-      NS_ASSERT (tempRxMobility != 0);
+      NS_ASSERT (tempRxMobility != nullptr);
 
       NS_LOG_DEBUG ("src ptr:" << PeekPointer (src) << "; i->second:" << PeekPointer (i->second));
 
