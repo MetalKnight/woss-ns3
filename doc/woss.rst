@@ -1,12 +1,12 @@
 WOSS Integration Framework
 --------------------------
 
-WOSS is a multi-threaded C++ framework that permits the integration of any existing underwater channel simulator 
-that expects environmental data as input and provides as output a channel realization. 
-Currently, WOSS integrates the Bellhop [1]_ ray-tracing program. 
-Thanks to its automation the user only has to specify the location in the world and the time 
-where the simulation should take place. 
-This is done by setting the simulated date and the wanted latitude and longitude of every node involved. 
+WOSS is a multi-threaded C++ framework that permits the integration of any existing underwater channel simulator
+that expects environmental data as input and provides as output a channel realization.
+Currently, WOSS integrates the Bellhop [1]_ ray-tracing program.
+Thanks to its automation the user only has to specify the location in the world and the time
+where the simulation should take place.
+This is done by setting the simulated date and the wanted latitude and longitude of every node involved.
 The simulator automatically handles the rest (see [2]_ and its technical description [3]_).
 WOSS has been already integrated in NS-Miracle [4]_ a popular |ns2| extension developed at University of Padua, Italy.
 
@@ -19,10 +19,10 @@ The source code for the Woss Integration Framework lives in the directory
 The WOSS Integration Framework is composed of two main parts:
 
 * the wrapper classes, located in ``src/WOSS/definitions`` containing all the wrappers needed by
-  the WOSS framework in order to be fully integrated into the host network simulator. These classes enable 
+  the WOSS framework in order to be fully integrated into the host network simulator. These classes enable
   the WOSS framework to use the host's model of time, random generator, mobility, spatial coordinates etc...
 
-* the UAN related classes, used to embed the WOSS framework within the UAN framework 
+* the UAN related classes, used to embed the WOSS framework within the UAN framework
   (channel, propagation, Power Delay Profile representation etc..)
 
 
@@ -40,12 +40,12 @@ WOSS Propagation Model
 ######################
 the ``ns3::WossPropModel`` interface extends the API defined in ``ns3::UanPropModel``.
 The propagation model provide a power delay profile (PDP) and pathloss
-information.  The PDP is retrieved using the ``GetPdpVector`` method which returns type ``ns3::UanPdpVector`` 
+information.  The PDP is retrieved using the ``GetPdpVector`` method which returns type ``ns3::UanPdpVector``
 which is a c++ vector of ``ns3::UanPdp``. This new function exploits the multithreaded capability
-of the WOSS framework, thus allowing the concurrent simulation of all the acoustic channels between 
+of the WOSS framework, thus allowing the concurrent simulation of all the acoustic channels between
 the given transmitter node and receiver nodes.
-the ``GetDelay`` function computes the acoustic propagation delay between two geographical coordinates 
-``woss::CoordZ``. The delay represents the first channel tap that exceeds the input SNR threshold. 
+the ``GetDelay`` function computes the acoustic propagation delay between two geographical coordinates
+``woss::CoordZ``. The delay represents the first channel tap that exceeds the input SNR threshold.
 
 WOSS position allocators
 ########################
@@ -75,13 +75,13 @@ How to Install
 ==============
 #. install Bellhop [1]_ and put the binary path in the ``$PATH`` environment;
 #. install the NetCDF legacy or NetCDF4 + HDF5 [6]_ libraries if you want to use the WOSS environmental databases;
-#. install WOSS, with multithread support (mandatory). |ns2| and Ns-Miracle [4]_ support are optional. 
+#. install WOSS, with multithread support (mandatory). |ns2| and Ns-Miracle [4]_ support are optional.
    NetCDF support must be installed depending on previous step.
-#. for more info on the previous step please see [7]_ 
+#. for more info on the previous step please see [7]_
 #. clone this repository into the ``<ns3-dir>/src/`` path
-#. example of installation with NetCDF legacy: 
+#. example of installation with NetCDF legacy:
    ``./waf -d debug --enable-tests --enable-examples --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf-lib=<netcdf_installed_lib_path> --with-netcdf-include=<netcdf_installed_include_path> configure``
-#. example of installation with NetCDF4 + HDF5, pay attention to the ``CXXFLAGS`` inline redefinition 
+#. example of installation with NetCDF4 + HDF5, pay attention to the ``CXXFLAGS`` inline redefinition
    due to a unresolved NetCDF-C++4 API warning:
    ``./waf configure --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf4-install=<netcdf4_and_hdf5_installed_path> CXXFLAGS="-Wall -Werror -Wno-unused-variable``
 #. for info on how to install all the required libraries with the suggested paths, please check [7]_
@@ -103,12 +103,12 @@ References
 ==========
 
 .. [1] Bellhop source code, URL: http://oalib.hlsresearch.com/Modes/AcousticsToolbox
-.. [2] P. Casari, C. Tapparello, F. Guerra, F. Favaro, I. Calabrese, G. Toso, S. Azad, R. Masiero, M. Zorzi; LOTT, R.; Open-source Suites for Underwater Networking: WOSS and DESERT Underwater, URL: http://telecom.dei.unipd.it/media/download/413
-.. [3] WOSS Technical Description, URL: http://telecom.dei.unipd.it/ns/woss/doxygen
+.. [2] P. Casari, C. Tapparello, F. Guerra, F. Favaro, I. Calabrese, G. Toso, S. Azad, R. Masiero, M. Zorzi; LOTT, R.; Open-source Suites for Underwater Networking: WOSS and DESERT Underwater, URL: https://woss.dei.unipd.it/wp-content/uploads/2023/08/Casari_IEEE_Network_2013_uw_opensource_Final.pdf
+.. [3] WOSS Technical Description, URL: https://woss.dei.unipd.it/woss/doxygen
 .. [4] NS-Miracle source code, URL: http://telecom.dei.unipd.it/pages/read/58
 .. [5] University of Padua list of publications on Underwater acoustic Networks; URL: http://telecom.dei.unipd.it/pages/read/75/
 .. [6] NetCDF library, URL: http://www.unidata.ucar.edu/downloads/netcdf/index.jsp
-.. [7] WOSS installation how-to, URL: URL: http://telecom.dei.unipd.it/ns/woss/doxygen/installation.html
+.. [7] WOSS installation how-to, URL: URL: https://woss.dei.unipd.it/woss/doxygen/installation.html
 
 Usage
 *****
@@ -125,14 +125,14 @@ further examples can be found into the Unit tests in ``src/woss/test/...cc``
 Examples
 ========
 
-An example of the Framework's usage can be found into the examples folder. 
+An example of the Framework's usage can be found into the examples folder.
 
 WOSS integration Example
 ########################
 
 * ``woss-aloha-example``:
-    We show how to use the WOSS helper, along with the introduced position allocators 
-    and waypoint mobility. We also show how to create a custom acoustic environment, by creating 
+    We show how to use the WOSS helper, along with the introduced position allocators
+    and waypoint mobility. We also show how to create a custom acoustic environment, by creating
     a bathymetrical grid and a custom sediment layer.
 
 
@@ -147,7 +147,7 @@ WossHelper
 
 This helper:
 * automatically configures and initializes all the ``woss::*`` related classes (debug, working directory, Bellhop configuration, simulation parameters etc...)
-* configures the environmental databases, either by using custom defined within the simulation or by using the world wide databases provided by WOSS. 
+* configures the environmental databases, either by using custom defined within the simulation or by using the world wide databases provided by WOSS.
 
 Attributes
 ==========
@@ -180,6 +180,6 @@ Caveats
 Validation
 **********
 
-The WOSS framework and its Bellhop integration has been validated by theoritical comparisons and 
+The WOSS framework and its Bellhop integration has been validated by theoritical comparisons and
 sea trials. For more information see [5]_
 
