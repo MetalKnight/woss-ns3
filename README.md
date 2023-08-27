@@ -13,7 +13,7 @@ WOSS can be integrated in any network simulator or simulation tool that supports
 - Acoustic Toolbox
 - NetCDF 4 with HDF5 or NetCDF legacy (optional)
 
-Latest WOSS source code, installation instructions and related libraries can be found at http://telecom.dei.unipd.it/ns/woss/
+Latest WOSS source code, installation instructions and related libraries can be found at https://woss.dei.unipd.it
 
 How to install 'woss-ns3' with *waf*:
 - download and install the recommended Acoustic Toolbox library
@@ -30,6 +30,6 @@ How to install 'woss-ns3' with *cmake*:
   - NetCDF4 and HDF5 support, *pay attention to the CXXFLAGS inline redefinition due to a unresolved NetCDF-C++4 API warning* `CXXFLAGS="-Wno-unused-variable" ./ns3 configure --enable-examples --enable-tests -- -DNS3_WITH_WOSS_SOURCE=/<woss_source_path> -DNS3_WITH_WOSS_LIBRARY=<woss_lib_path> -DNS3_WITH_NETCDF4_INSTALL=<netcdf4_and_hdf5_installed_path>`
   - with no NetCDF support `CXXFLAGS="-Wno-unused-variable" ./ns3 configure --enable-examples --enable-tests -- -DNS3_WITH_WOSS_SOURCE=/<woss_source_path> -DNS3_WITH_WOSS_LIBRARY=<woss_lib_path>`
 
-For info on how to install all the required libraries with the suggested paths, please check http://telecom.dei.unipd.it/ns/woss/doxygen/installation.html
+For info on how to install all the required libraries with the suggested paths, please check https://woss.dei.unipd.it/woss/doxygen/installation.html
 
 *Any issue should be reported via github Issue tracker or via e-mail to WOSS@guerra-tlc.com*.
