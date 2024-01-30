@@ -45,10 +45,10 @@ public:
   /**
     * Default constructor used within the WOSS framework.
     * The seed parameter allows the WOSS framework to abstract
-    * from the wrapped random generator model, 
+    * from the wrapped random generator model,
     * however in the NS3 integration framework it is
-    * not used. The RandomVar is created with default random 
-    * generator seed, while the stream can be assigned via AssignStreams 
+    * not used. The RandomVar is created with default random
+    * generator seed, while the stream can be assigned via AssignStreams
     *
     * \param seed assigned stream
     */
@@ -76,14 +76,27 @@ public:
    * Mandatory virtual factory method that creates a new object.
    * It is inherited and it is used within the WOSS framework.
    * It creates an new object; the seed parameter allows the WOSS framework to abstract
-   * from the wrapped random generator model, 
+   * from the wrapped random generator model,
    * however in the NS3 integration framework it is
-   * not used. The RandomVar is created with default random 
-   * generator seed, while the stream can be assigned via AssignStreams 
+   * not used. The RandomVar is created with default random
+   * generator seed, while the stream can be assigned via AssignStreams
    * on the private m_RandVar
    * \param seed assigned stream
    */
   virtual WossRandomGenerator* create ( int seed );
+
+  /**
+   * Virtual factory method that creates a new object.
+   * It is inherited and it is used within the WOSS framework.
+   * It creates an new object; the seed parameter allows the WOSS framework to abstract
+   * from the wrapped random generator model,
+   * however in the NS3 integration framework it is
+   * not used. The RandomVar is created with default random
+   * generator seed, while the stream can be assigned via AssignStreams
+   * on the private m_RandVar
+   * \param seed assigned seed in double format
+   */
+  virtual WossRandomGenerator* create ( double seed );
 
   /**
    * Mandatory virtual factory method that clones the current object.
