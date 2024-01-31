@@ -86,6 +86,12 @@ WossRandomGenerator::create ( int s )
 }
 
 WossRandomGenerator*
+WossRandomGenerator::create ( double s )
+{
+  return create ((int)s);
+}
+
+WossRandomGenerator*
 WossRandomGenerator::clone () const
 {
   return new WossRandomGenerator (*this);
