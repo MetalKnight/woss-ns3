@@ -113,7 +113,7 @@ WossGridPositionAllocator::GetTypeId (void)
                    MakeDoubleChecker<double> ())
     .AddAttribute ("LayoutType", "The type of layout.",
                    EnumValue (ROW_FIRST),
-                   MakeEnumAccessor (&WossGridPositionAllocator::m_layoutType),
+                   MakeEnumAccessor<LayoutType> (&WossGridPositionAllocator::m_layoutType),
                    MakeEnumChecker (ROW_FIRST, "RowFirst",
                                     COLUMN_FIRST, "ColumnFirst"))
   ;

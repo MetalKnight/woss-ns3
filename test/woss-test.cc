@@ -437,9 +437,9 @@ public:
 };
 
 WossTestSuite::WossTestSuite ()
-  :  TestSuite ("devices-woss", UNIT)
+  :  TestSuite ("devices-woss", Type::UNIT)
 {
-  AddTestCase (new WossTest, TestCase::QUICK);
+  AddTestCase (new WossTest, Duration::QUICK);
 }
 
 static WossTestSuite g_uanWossTestSuite;

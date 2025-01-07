@@ -187,7 +187,7 @@ WossHelper::WossHelper ()
     m_wossRandomGenStream (0),
     m_randomGenProto (),
     m_timeRefProto (),
-    m_defHandler (NULL),
+    m_defHandler (nullptr),
     m_resDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_resDbDebug (WH_DEBUG_DEFAULT),
     m_resDbUseBinary (true),
@@ -195,10 +195,10 @@ WossHelper::WossHelper ()
     m_resDbSpaceSampling (WH_SPACE_SAMPLING_DEFAULT),
     m_resDbFilePath (WH_STRING_DEFAULT),
     m_resDbFileName (WH_STRING_DEFAULT),
-    m_resDbCreatorPressBin (NULL),
-    m_resDbCreatorPressTxt (NULL),
-    m_resDbCreatorTimeArrBin (NULL),
-    m_resDbCreatorTimeArrTxt (NULL),
+    m_resDbCreatorPressBin (nullptr),
+    m_resDbCreatorPressTxt (nullptr),
+    m_resDbCreatorTimeArrBin (nullptr),
+    m_resDbCreatorTimeArrTxt (nullptr),
 #if defined (WOSS_NETCDF_SUPPORT)
     m_sedimDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sedimDbDebug (WH_DEBUG_DEFAULT),
@@ -208,22 +208,22 @@ WossHelper::WossHelper ()
     m_sedimDbCoordFilePath (WH_STRING_DEFAULT),
     m_sedimDbMarsdenFilePath (WH_STRING_DEFAULT),
     m_sedimDbMarsdenOneFilePath (WH_STRING_DEFAULT),
-    m_sedimDbCreator (NULL),
+    m_sedimDbCreator (nullptr),
     m_sspDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sspDbDebug (WH_DEBUG_DEFAULT),
     m_sspDbFilePath (WH_STRING_DEFAULT),
 #if defined (WOSS_NETCDF4_SUPPORT)
     m_sspWoaDbType (WH_WOA_DB_TYPE_DEFAULT),
 #endif // defined (WOSS_NETCDF_SUPPORT)
-    m_sspDbCreator (NULL),
+    m_sspDbCreator (nullptr),
     m_bathyDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_bathyDbDebug (WH_DEBUG_DEFAULT),
     m_bathyDbGebcoFormat(WH_GEBCO_FORMAT_DEFAULT),
     m_bathyDbFilePath (WH_STRING_DEFAULT),
-    m_bathyDbCreator (NULL),
+    m_bathyDbCreator (nullptr),
 #endif // defined (WOSS_NETCDF_SUPPORT)
     m_wossDbManagerDebug (WH_DEBUG_DEFAULT),
-    m_wossDbManager (NULL),
+    m_wossDbManager (nullptr),
     m_wossCreatorDebug (WH_DEBUG_DEFAULT),
     m_wossDebug (WH_DEBUG_DEFAULT),
     m_wossClearWorkDir (true),
@@ -255,7 +255,7 @@ WossHelper::WossHelper ()
     m_bellhopArrSyntax (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
     m_bellhopShdSyntax (WH_BELLHOP_SHD_SYNTAX_DEFAULT),
     m_simTime (),
-    m_bellhopCreator (NULL),
+    m_bellhopCreator (nullptr),
     m_boxDepth (WH_BOX_DEPTH),
     m_boxRange (WH_BOX_RANGE),
     m_wossManagerDebug (WH_DEBUG_DEFAULT),
@@ -263,10 +263,10 @@ WossHelper::WossHelper ()
     m_concurrentThreads (WH_CONCURRENT_THREADS_DEFAULT),
     m_wossManagerSpaceSampling (WH_SPACE_SAMPLING_DEFAULT),
     m_wossManagerUseMultiThread (false),
-    m_wossManagerSimple (NULL),
-    m_wossManagerMulti (NULL),
+    m_wossManagerSimple (nullptr),
+    m_wossManagerMulti (nullptr),
     m_wossTransducerHndlDebug (WH_DEBUG_DEFAULT),
-    m_wossTransducerHndl (NULL),
+    m_wossTransducerHndl (nullptr),
     m_wossControllerDebug (WH_DEBUG_DEFAULT),
     m_wossController (),
     m_initialized (false)
@@ -287,69 +287,69 @@ WossHelper::DoDispose (void)
 
   DeleteWossLocationMap ();
 
-  if (m_wossManagerSimple != NULL)
+  if (m_wossManagerSimple != nullptr)
     {
       delete m_wossManagerSimple;
     }
 
-  if (m_wossManagerMulti != NULL)
+  if (m_wossManagerMulti != nullptr)
     {
       delete m_wossManagerMulti;
     }
 
-  if (m_wossTransducerHndl != NULL)
+  if (m_wossTransducerHndl != nullptr)
     {
       delete m_wossTransducerHndl;
     }
 
-  if (m_bellhopCreator != NULL)
+  if (m_bellhopCreator != nullptr)
     {
       delete m_bellhopCreator;
     }
 
-  if (m_wossDbManager != NULL)
+  if (m_wossDbManager != nullptr)
     {
       delete m_wossDbManager;
     }
 
 #if defined (WOSS_NETCDF_SUPPORT)
-  if (m_bathyDbCreator != NULL)
+  if (m_bathyDbCreator != nullptr)
     {
       delete m_bathyDbCreator;
     }
 
-  if (m_sspDbCreator != NULL)
+  if (m_sspDbCreator != nullptr)
     {
       delete m_sspDbCreator;
     }
 
-  if (m_sedimDbCreator != NULL)
+  if (m_sedimDbCreator != nullptr)
     {
       delete m_sedimDbCreator;
     }
 #endif // defined (WOSS_NETCDF_SUPPORT)
 
-  if (m_resDbCreatorPressBin != NULL)
+  if (m_resDbCreatorPressBin != nullptr)
     {
       delete m_resDbCreatorPressBin;
     }
 
-  if (m_resDbCreatorPressTxt != NULL)
+  if (m_resDbCreatorPressTxt != nullptr)
     {
       delete m_resDbCreatorPressTxt;
     }
 
-  if (m_resDbCreatorTimeArrBin != NULL)
+  if (m_resDbCreatorTimeArrBin != nullptr)
     {
       delete m_resDbCreatorTimeArrBin;
     }
 
-  if (m_resDbCreatorTimeArrTxt != NULL)
+  if (m_resDbCreatorTimeArrTxt != nullptr)
     {
       delete m_resDbCreatorTimeArrTxt;
     }
 
-  if (m_wossController != NULL)
+  if (m_wossController != nullptr)
     {
       delete m_wossController;
     }
@@ -605,7 +605,7 @@ WossHelper::GetWossLocation ( Ptr< MobilityModel > ptr )
 {
   NS_LOG_FUNCTION (this << ptr);
 
-  WossLocation* retValue = NULL;
+  WossLocation* retValue = nullptr;
 
   MLMCIter it = m_locMap.find (PeekPointer (ptr));
 
@@ -630,7 +630,7 @@ WossHelper::DeleteWossLocationMap (void)
 {
   for ( MLMCIter it = m_locMap.begin (); it != m_locMap.end (); ++it )
     {
-      if (it->second != NULL)
+      if (it->second != nullptr)
         {
           delete it->second;
         }
@@ -673,9 +673,9 @@ WossHelper::SetAngles ( const woss::CustomAngles& angles, Ptr<MobilityModel> tx,
 {
   CheckInitialized ();
 
-  if ( tx == NULL )
+  if ( tx == nullptr )
     {
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->setAngles (angles);
         }
@@ -689,7 +689,7 @@ WossHelper::SetAngles ( const woss::CustomAngles& angles, Ptr<MobilityModel> tx,
     {
       WossLocation* txLoc = GetWossLocation ( tx );
 
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->eraseAngles ( txLoc );
         }
@@ -709,9 +709,9 @@ WossHelper::GetAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx ) const
 {
   CheckInitialized ();
 
-  if ( tx == NULL )
+  if ( tx == nullptr )
     {
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           return m_bellhopCreator->getAngles ();
         }
@@ -725,7 +725,7 @@ WossHelper::GetAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx ) const
     {
       WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           return m_bellhopCreator->getAngles ( txLoc );
         }
@@ -743,9 +743,9 @@ WossHelper::EraseAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
 {
   CheckInitialized ();
 
-  if ( tx == NULL )
+  if ( tx == nullptr )
     {
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->eraseAngles ();
         }
@@ -759,7 +759,7 @@ WossHelper::EraseAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
     {
       WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->eraseAngles ( txLoc );
         }
@@ -838,9 +838,9 @@ WossHelper::SetCustomTransducer ( const woss::CustomTransducer& type, Ptr<Mobili
 {
   CheckInitialized ();
 
-  if ( tx == NULL )
+  if ( tx == nullptr )
     {
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->setCustomTransducer (type);
         }
@@ -854,7 +854,7 @@ WossHelper::SetCustomTransducer ( const woss::CustomTransducer& type, Ptr<Mobili
     {
       WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->setCustomTransducer ( type, txLoc );
         }
@@ -874,9 +874,9 @@ WossHelper::GetCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
 {
   CheckInitialized ();
 
-  if ( tx == NULL )
+  if ( tx == nullptr )
     {
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           return m_bellhopCreator->getCustomTransducer ();
         }
@@ -890,7 +890,7 @@ WossHelper::GetCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
     {
       WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           return m_bellhopCreator->getCustomTransducer ( txLoc );
         }
@@ -908,9 +908,9 @@ WossHelper::EraseCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx
 {
   CheckInitialized ();
 
-  if ( tx == NULL )
+  if ( tx == nullptr )
     {
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->eraseCustomTransducer ();
         }
@@ -924,7 +924,7 @@ WossHelper::EraseCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx
     {
       WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
-      if ( rx == NULL )
+      if ( rx == nullptr )
         {
           m_bellhopCreator->eraseCustomTransducer ( txLoc );
         }
@@ -1286,7 +1286,7 @@ WossHelper::CreateDirectory (const ::std::string& path)
 
   NS_LOG_DEBUG ("WossHelper::CreateDirectory () command = " << command);
 
-  if (system (NULL))
+  if (system (nullptr))
     {
       ret_value = system (command.c_str ());
     }

@@ -71,7 +71,7 @@ WossChannel::WossChannel ()
   : UanChannel (),
     m_channelEqSnrThresDb (WOSS_CHANNEL_SNR_EQ_THRES_DB),
     // -infinite snr ==> first tap
-    m_wossPropModel (NULL)
+    m_wossPropModel (nullptr)
 {
 }
 
@@ -87,7 +87,7 @@ WossChannel::DoInitialize (void)
 
   m_wossPropModel = DynamicCast< WossPropModel > ( m_prop );
 
-  NS_ASSERT ( m_wossPropModel != NULL );
+  NS_ASSERT ( m_wossPropModel != nullptr );
 
   UanChannel::DoInitialize ();
 }
