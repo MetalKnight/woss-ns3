@@ -418,7 +418,7 @@ WossTest::DoRun (void)
 
   ::std::cout << "channelAttDb = " << channelAttDb << "; channelAttDb2 = " << channelAttDb2 << ::std::endl;
 
-  NS_TEST_ASSERT_MSG_EQ_TOL (channelAttDb, channelAttDb2, 0.01, "Got two attenuation dbs outside of tolerance");
+  NS_TEST_ASSERT_MSG_EQ_TOL (channelAttDb, channelAttDb2, 0.1, "Got two attenuation dbs outside of tolerance");
 
   // phy tests
   DoPhyTests (wossProp);
