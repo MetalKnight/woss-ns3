@@ -247,7 +247,7 @@ Experiment::Run (uint32_t param)
 
   Ptr<Node> nodeSink = sink.Get (0);
   Ptr<WossWaypointMobilityModel> sinkMob = nodeSink->GetObject<WossWaypointMobilityModel> ();
-  NS_ASSERT (sinkMob != NULL);
+  NS_ASSERT (sinkMob != nullptr);
 
   for (int cnt = 0; cnt < 5; ++cnt)
     {
