@@ -26,21 +26,16 @@
 
 namespace ns3 {
 
-WossTimeReference::~WossTimeReference ()
-{
-
-}
-
 double
 WossTimeReference::getTimeReference () const
 {
   return Simulator::Now ().GetSeconds ();
 }
 
-WossTimeReference*
-WossTimeReference::clone ()
+std::unique_ptr<woss::TimeReference>
+WossTimeReference::clone () const
 {
-  return new WossTimeReference (*this);
+  return std::make_unique< WossTimeReference > (*this);
 }
 
 }

@@ -37,14 +37,11 @@ NS_LOG_COMPONENT_DEFINE ("WossPropModel");
 NS_OBJECT_ENSURE_REGISTERED (WossPropModel);
 
 WossPropModel::WossPropModel ()
-  : m_wossManager (NULL),
+  : m_wossManager (nullptr),
     m_memOptimization (false)
 {
 }
 
-WossPropModel::~WossPropModel ()
-{
-}
 
 TypeId
 WossPropModel::GetTypeId (void)
@@ -64,12 +61,12 @@ WossPropModel::GetTypeId (void)
 }
 
 void
-WossPropModel::SetWossManager (woss::WossManager* wossManagerPtr)
+WossPropModel::SetWossManager (std::shared_ptr<woss::WossManager> wossManagerPtr)
 {
   m_wossManager = wossManagerPtr;
 }
 
-woss::WossManager* const
+std::shared_ptr<woss::WossManager> const
 WossPropModel::GetWossManager (void)
 {
   return m_wossManager;
@@ -106,13 +103,13 @@ WossPropModel::GetPdp (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mod
 
   NS_LOG_DEBUG ("txCoordz: " << txCoordz << "; rxCoorz: " << rxCoorz << "; startFreq: " << startFreq << "; endFreq: " << endFreq);
 
-  woss::TimeArr* currTimeArr = m_wossManager->getWossTimeArr (txCoordz, rxCoorz, startFreq, endFreq);
+  auto currTimeArr = m_wossManager->getWossTimeArr (txCoordz, rxCoorz, startFreq, endFreq);
 
   NS_ASSERT ( currTimeArr != NULL );
 
   NS_LOG_DEBUG ("timeArr: " << *currTimeArr);
 
-  UanPdp pdp = CreateUanPdp (currTimeArr, (1.0 / mode.GetPhyRateSps ()));
+  UanPdp pdp = CreateUanPdp (std::move (currTimeArr), (1.0 / mode.GetPhyRateSps ()));
   
   if (m_memOptimization)
   {
@@ -151,16 +148,16 @@ WossPropModel::GetPdpVector (Ptr<MobilityModel> a, MobModelVector& b, UanTxMode 
 }
 
 UanPdp
-WossPropModel::CreateUanPdp (woss::TimeArr* timeArr, double symbolTime)
+WossPropModel::CreateUanPdp (std::unique_ptr<woss::TimeArr> timeArr, double symbolTime)
 {
   NS_LOG_FUNCTION (this);
 
-  ::std::vector< Tap > vectTap;
+  std::vector< Tap > vectTap;
 
   NS_LOG_DEBUG ("timeArr: " << *timeArr << "; symbolTime: " << symbolTime);
 
   // we sum coherently at symbol time
-  woss::TimeArr* coherentSum = timeArr->coherentSumSample (symbolTime);
+  auto coherentSum = timeArr->coherentSumSample (symbolTime);
 
   NS_LOG_DEBUG ("coherentSum size: " << coherentSum->size ());
 
@@ -178,7 +175,7 @@ WossPropModel::CreateUanPdp (woss::TimeArr* timeArr, double symbolTime)
       // compute taps number only if there are more than one taps
       if(start_time < end_time) 
         {
-          n_taps = ::std::ceil ((end_time - start_time) / symbolTime);
+          n_taps = std::ceil ((end_time - start_time) / symbolTime);
         }
 
       int cnt = 0;
@@ -191,19 +188,19 @@ WossPropModel::CreateUanPdp (woss::TimeArr* timeArr, double symbolTime)
         {
           double tap_time = start_time + cnt * symbolTime;
 
-          ::std::complex<double> tap_value (0.0, 0.0);
+          std::complex<double> tap_value (0.0, 0.0);
 
           if (it == coherentSum->end ())
             {
               break;
             }
 
-          if (::woss::PDouble (tap_time, symbolTime * 1.1 / 2.0) == it->first)
+          if (woss::PDouble (tap_time, symbolTime * 1.1 / 2.0) == it->first)
             { // if |tap_time - it->first| <= ((symbolTime+0.1*symbolTime)/2.0) ==> set tap, advance iterator
               tap_value = it->second;
               it++;
             }
-          else if (::woss::PDouble (tap_time, symbolTime * 1.1 / 2.0) > it->first)
+          else if (woss::PDouble (tap_time, symbolTime * 1.1 / 2.0) > it->first)
             { // if tap_time > it->first ==> fatal error
               NS_FATAL_ERROR ("tap_time: " << tap_time << " > iterator time: " << it->first);
             }
@@ -215,15 +212,12 @@ WossPropModel::CreateUanPdp (woss::TimeArr* timeArr, double symbolTime)
         }
 
         NS_ASSERT (cnt == n_taps);
-    }
-
-  delete timeArr;
-  delete coherentSum;  
+    } 
 
   if (vectTap.size () == 0)
     {
       // return empty channel
-      vectTap.push_back (Tap (Seconds (0.0), ::std::complex<double> (0.0, 0.0)));
+      vectTap.push_back (Tap (Seconds (0.0), std::complex<double> (0.0, 0.0)));
     }
 
   return (UanPdp (vectTap, Seconds (symbolTime)));
@@ -238,7 +232,7 @@ WossPropModel::CreateUanPdpVector (woss::TimeArrVector& timeArrVector, double sy
 
   for ( woss::TimeArrVector::iterator it = timeArrVector.begin (); it != timeArrVector.end (); ++it )
     {
-      retVal.push_back (CreateUanPdp (*it, symbolTime));
+      retVal.push_back (CreateUanPdp (std::move(*it), symbolTime));
     }
 
   return retVal;
@@ -266,7 +260,7 @@ WossPropModel::CreateCoordzPairVector ( Ptr<MobilityModel> tx, MobModelVector& r
 
   for ( MobModelVector::iterator it = rxs.begin (); it != rxs.end (); ++it )
     {
-      retVal.push_back (::std::make_pair (CreateCoordZ (tx), CreateCoordZ (*it)));
+      retVal.push_back (std::make_pair (CreateCoordZ (tx), CreateCoordZ (*it)));
     }
 
   return retVal;
@@ -282,13 +276,13 @@ WossPropModel::GetDelay (const woss::CoordZ &a, const woss::CoordZ &b, UanTxMode
 
   NS_LOG_DEBUG ("a: " << a << "; b: " << b << "; startFreq: " << startFreq << "; endFreq: " << endFreq);
 
-  woss::TimeArr* currTimeArr = m_wossManager->getWossTimeArr (a, b, startFreq, endFreq);
+  auto currTimeArr = m_wossManager->getWossTimeArr (a, b, startFreq, endFreq);
 
   NS_ASSERT ( currTimeArr != NULL );
 
   NS_LOG_DEBUG ("timeArr: " << *currTimeArr);
 
-  UanPdp uanPdp = CreateUanPdp (currTimeArr, (1.0 / mode.GetPhyRateSps ()));
+  UanPdp uanPdp = CreateUanPdp (std::move (currTimeArr), (1.0 / mode.GetPhyRateSps ()));
 
   if (m_memOptimization)
   {
@@ -303,7 +297,7 @@ WossPropModel::GetDelay (const woss::CoordZ &a, const woss::CoordZ &b, UanTxMode
 
   for (int tapCnt = 0; it != uanPdp.GetEnd (); ++it, ++tapCnt)
     {
-      double attChDb = -20.0 * ::std::log10 (::std::abs (it->GetAmp ()));
+      double attChDb = -20.0 * std::log10 (std::abs (it->GetAmp ()));
 
       NS_LOG_DEBUG ("tap: " << tapCnt << "; attChDb: " << attChDb << "dB" );
 

@@ -43,9 +43,9 @@ public:
   /**
    * \param model underlying ns3::MobilityModel
    */
-  WossLocation (Ptr<MobilityModel> model);
+  WossLocation (Ptr<MobilityModel> model = nullptr);
 
-  virtual ~WossLocation ();
+  virtual ~WossLocation () = default;
 
   /**
    * This is the main function called by the WOSS framework in order to get
@@ -54,7 +54,7 @@ public:
    * \returns converts the underlying MobilityModel::GetPosition()
    * into a woss::CoordZ object
    */
-  virtual woss::CoordZ getLocation ();
+  virtual woss::CoordZ getLocation () override;
 
 
   void SetMobilityModel (Ptr<MobilityModel> model);

@@ -36,10 +36,6 @@ WossRandomGenerator::WossRandomGenerator (int seed)
   m_RandVar = CreateObject<UniformRandomVariable> ();
 }
 
-WossRandomGenerator::~WossRandomGenerator ()
-{
-
-}
 
 WossRandomGenerator::WossRandomGenerator (const WossRandomGenerator& copy)
   : RandomGenerator ( copy.seed ),
@@ -79,22 +75,22 @@ WossRandomGenerator::getRandInt () const
   return m_RandVar->GetInteger (WOSS_INTEGER_MIN, WOSS_INTEGER_MAX);
 }
 
-WossRandomGenerator*
-WossRandomGenerator::create ( int s )
+std::unique_ptr<woss::RandomGenerator>
+WossRandomGenerator::create ( int s ) const
 {
-  return new WossRandomGenerator (s);
+  return std::make_unique< WossRandomGenerator> (s);
 }
 
-WossRandomGenerator*
-WossRandomGenerator::create ( double s )
+std::unique_ptr<woss::RandomGenerator>
+WossRandomGenerator::create ( double s ) const
 {
   return create ((int)s);
 }
 
-WossRandomGenerator*
+std::unique_ptr<woss::RandomGenerator>
 WossRandomGenerator::clone () const
 {
-  return new WossRandomGenerator (*this);
+  return std::make_unique< WossRandomGenerator > (*this);
 }
 
 int64_t

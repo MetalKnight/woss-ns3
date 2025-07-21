@@ -43,20 +43,20 @@ class WossTimeReference : public woss::TimeReference
 
 
 public:
-  virtual ~WossTimeReference ();
+  virtual ~WossTimeReference () = default;
 
   /**
    * returns the current NS3 time in seconds represented as a double.
    * \returns the current NS3 time in seconds in double representation
    */
-  virtual double getTimeReference () const;
+  virtual double getTimeReference () const override;
 
   /**
    * Mandatory virtual factory method that returns a new WossTimeReference created via
    * copy-constructor. The new object will return the same time-reference as the source
    * object since they both rely on ns3::Scheduler::Now ()
    */
-  virtual WossTimeReference* clone ();
+  virtual std::unique_ptr<woss::TimeReference> clone () const override;
 
 
 };

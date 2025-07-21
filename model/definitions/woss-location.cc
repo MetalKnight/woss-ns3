@@ -34,12 +34,6 @@ WossLocation::WossLocation (Ptr<MobilityModel> m)
 }
 
 
-WossLocation::~WossLocation ()
-{
-
-}
-
-
 woss::CoordZ
 WossLocation::getLocation ()
 {

@@ -75,7 +75,7 @@
 #define WH_SEDIMENT_DECK41_FORMAT_DEFAULT (1)
 #define WH_SEDIMENT_DECK41_FORMAT_MIN (0)
 #define WH_SEDIMENT_DECK41_FORMAT_MAX (1)
-#endif // defined (WOSS_NETCDF_SUPPORT)
+#endif // defined (WOSS_NETCDF4_SUPPORT)
 
 namespace ns3 {
 
@@ -120,8 +120,8 @@ CreateCoordFromVector (Vector vect)
 }
 
 
-::std::ostream &
-operator << (::std::ostream &os, const WossSimTime &simTime)
+std::ostream &
+operator << (std::ostream &os, const WossSimTime &simTime)
 {
   os << simTime.start_time.getDay () << "|" << simTime.start_time.getMonth () << "|" << simTime.start_time.getYear () << "|"
   << simTime.end_time.getDay () << "|" << simTime.end_time.getMonth () << "|" << simTime.end_time.getYear ();
@@ -129,8 +129,8 @@ operator << (::std::ostream &os, const WossSimTime &simTime)
   return os;
 }
 
-::std::istream &
-operator >> (::std::istream &is, WossSimTime &simTime)
+std::istream &
+operator >> (std::istream &is, WossSimTime &simTime)
 {
   char c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11;
   int d1, mn1, y1, h1, m1, s1, d2, mn2, y2, h2, m2, s2;
@@ -178,16 +178,17 @@ operator >> (::std::istream &is, WossSimTime &simTime)
 
 WossHelper::WossHelper ()
   : m_locMap (),
-    m_sspProto (),
-    m_sedimentProto (),
-    m_pressureProto (),
-    m_timeArrProto (),
-    m_transducerProto (),
-    m_altimBretProto (),
+    m_sspProto (std::make_unique<woss::SSP> ()),
+    m_sedimentProto (std::make_unique<woss::Sediment> ()),
+    m_pressureProto (std::make_unique<woss::Pressure> ()),
+    m_timeArrProto (std::make_unique<woss::TimeArr> ()),
+    m_transducerProto (std::make_unique<woss::Transducer> ()),
+    m_altimBretProto (std::make_unique<woss::AltimBretschneider> ()),
+    m_locationProto (std::make_unique<WossLocation> ()),
     m_wossRandomGenStream (0),
-    m_randomGenProto (),
-    m_timeRefProto (),
-    m_defHandler (nullptr),
+    m_randomGenProto (std::make_unique<WossRandomGenerator> ()),
+    m_timeRefProto (std::make_unique<WossTimeReference> ()),
+    m_defHandler (woss::SDefHandler::instance ()),
     m_resDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_resDbDebug (WH_DEBUG_DEFAULT),
     m_resDbUseBinary (true),
@@ -195,10 +196,10 @@ WossHelper::WossHelper ()
     m_resDbSpaceSampling (WH_SPACE_SAMPLING_DEFAULT),
     m_resDbFilePath (WH_STRING_DEFAULT),
     m_resDbFileName (WH_STRING_DEFAULT),
-    m_resDbCreatorPressBin (nullptr),
-    m_resDbCreatorPressTxt (nullptr),
-    m_resDbCreatorTimeArrBin (nullptr),
-    m_resDbCreatorTimeArrTxt (nullptr),
+    m_resDbCreatorPressBin (std::make_shared<woss::ResPressureBinDbCreator> ()),
+    m_resDbCreatorPressTxt (std::make_shared<woss::ResPressureTxtDbCreator> ()),
+    m_resDbCreatorTimeArrBin (std::make_shared<woss::ResTimeArrBinDbCreator> ()),
+    m_resDbCreatorTimeArrTxt (std::make_shared<woss::ResTimeArrTxtDbCreator> ()),
 #if defined (WOSS_NETCDF_SUPPORT)
     m_sedimDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sedimDbDebug (WH_DEBUG_DEFAULT),
@@ -208,22 +209,24 @@ WossHelper::WossHelper ()
     m_sedimDbCoordFilePath (WH_STRING_DEFAULT),
     m_sedimDbMarsdenFilePath (WH_STRING_DEFAULT),
     m_sedimDbMarsdenOneFilePath (WH_STRING_DEFAULT),
-    m_sedimDbCreator (nullptr),
+    m_sedimDbCreator (std::make_shared<woss::SedimDeck41DbCreator> ()),
     m_sspDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_sspDbDebug (WH_DEBUG_DEFAULT),
     m_sspDbFilePath (WH_STRING_DEFAULT),
 #if defined (WOSS_NETCDF4_SUPPORT)
     m_sspWoaDbType (WH_WOA_DB_TYPE_DEFAULT),
+    m_sspDbCreator (std::make_shared<woss::SspWoa2005DbCreator> ((woss::WOADbType)m_sspWoaDbType)),
+#else
+    m_sspDbCreator (std::make_shared<woss::SspWoa2005DbCreator> ()),
 #endif // defined (WOSS_NETCDF_SUPPORT)
-    m_sspDbCreator (nullptr),
     m_bathyDbCreatorDebug (WH_DEBUG_DEFAULT),
     m_bathyDbDebug (WH_DEBUG_DEFAULT),
     m_bathyDbGebcoFormat(WH_GEBCO_FORMAT_DEFAULT),
     m_bathyDbFilePath (WH_STRING_DEFAULT),
-    m_bathyDbCreator (nullptr),
+    m_bathyDbCreator (std::make_shared<woss::BathyGebcoDbCreator> ()),
 #endif // defined (WOSS_NETCDF_SUPPORT)
     m_wossDbManagerDebug (WH_DEBUG_DEFAULT),
-    m_wossDbManager (nullptr),
+    m_wossDbManager (std::make_shared<woss::WossDbManager> ()),
     m_wossCreatorDebug (WH_DEBUG_DEFAULT),
     m_wossDebug (WH_DEBUG_DEFAULT),
     m_wossClearWorkDir (true),
@@ -255,7 +258,7 @@ WossHelper::WossHelper ()
     m_bellhopArrSyntax (WH_BELLHOP_ARR_SYNTAX_DEFAULT),
     m_bellhopShdSyntax (WH_BELLHOP_SHD_SYNTAX_DEFAULT),
     m_simTime (),
-    m_bellhopCreator (nullptr),
+    m_bellhopCreator (std::make_shared<woss::BellhopCreator> ()),
     m_boxDepth (WH_BOX_DEPTH),
     m_boxRange (WH_BOX_RANGE),
     m_wossManagerDebug (WH_DEBUG_DEFAULT),
@@ -263,96 +266,28 @@ WossHelper::WossHelper ()
     m_concurrentThreads (WH_CONCURRENT_THREADS_DEFAULT),
     m_wossManagerSpaceSampling (WH_SPACE_SAMPLING_DEFAULT),
     m_wossManagerUseMultiThread (false),
-    m_wossManagerSimple (nullptr),
-    m_wossManagerMulti (nullptr),
+    m_wossManagerSimple (std::make_shared< woss::WossManagerSimple<woss::WossManagerResDb> > ()),
+    m_wossManagerMulti (std::make_shared< woss::WossManagerSimple<woss::WossManagerResDbMT> > ()),
     m_wossTransducerHndlDebug (WH_DEBUG_DEFAULT),
-    m_wossTransducerHndl (nullptr),
+    m_wossTransducerHndl (std::make_shared<woss::TransducerHandler> ()),
     m_wossControllerDebug (WH_DEBUG_DEFAULT),
-    m_wossController (),
+    m_wossController (std::make_shared<woss::WossController> ()),
     m_initialized (false)
 {
-  m_defHandler = woss::SDefHandler::instance ();
+  m_defHandler.setSSP (std::move (m_sspProto));
+  m_defHandler.setSediment (std::move (m_sedimentProto));
+  m_defHandler.setTransducer (std::move (m_transducerProto));
+  m_defHandler.setAltimetry (std::move (m_altimBretProto));
+  m_defHandler.setPressure (std::move (m_pressureProto));
+  m_defHandler.setTimeArr (std::move (m_timeArrProto));
+  m_defHandler.setLocation (std::move (m_locationProto));
+  m_defHandler.setTimeReference (std::move (m_timeRefProto));
 }
-
-WossHelper::~WossHelper ()
-{
-
-}
-
 
 void
 WossHelper::DoDispose (void)
 {
   NS_LOG_FUNCTION (this);
-
-  DeleteWossLocationMap ();
-
-  if (m_wossManagerSimple != nullptr)
-    {
-      delete m_wossManagerSimple;
-    }
-
-  if (m_wossManagerMulti != nullptr)
-    {
-      delete m_wossManagerMulti;
-    }
-
-  if (m_wossTransducerHndl != nullptr)
-    {
-      delete m_wossTransducerHndl;
-    }
-
-  if (m_bellhopCreator != nullptr)
-    {
-      delete m_bellhopCreator;
-    }
-
-  if (m_wossDbManager != nullptr)
-    {
-      delete m_wossDbManager;
-    }
-
-#if defined (WOSS_NETCDF_SUPPORT)
-  if (m_bathyDbCreator != nullptr)
-    {
-      delete m_bathyDbCreator;
-    }
-
-  if (m_sspDbCreator != nullptr)
-    {
-      delete m_sspDbCreator;
-    }
-
-  if (m_sedimDbCreator != nullptr)
-    {
-      delete m_sedimDbCreator;
-    }
-#endif // defined (WOSS_NETCDF_SUPPORT)
-
-  if (m_resDbCreatorPressBin != nullptr)
-    {
-      delete m_resDbCreatorPressBin;
-    }
-
-  if (m_resDbCreatorPressTxt != nullptr)
-    {
-      delete m_resDbCreatorPressTxt;
-    }
-
-  if (m_resDbCreatorTimeArrBin != nullptr)
-    {
-      delete m_resDbCreatorTimeArrBin;
-    }
-
-  if (m_resDbCreatorTimeArrTxt != nullptr)
-    {
-      delete m_resDbCreatorTimeArrTxt;
-    }
-
-  if (m_wossController != nullptr)
-    {
-      delete m_wossController;
-    }
 
   m_initialized = false;
 }
@@ -384,25 +319,14 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 
   NS_LOG_DEBUG ("Setting DefHandler");
 
-  m_defHandler->setSSP (m_sspProto.clone ());
-  m_defHandler->setSediment (m_sedimentProto.clone ());
-  m_defHandler->setTransducer (m_transducerProto.clone ());
-  m_defHandler->setAltimetry (m_altimBretProto.clone ());
-  m_defHandler->setPressure (m_pressureProto.clone ());
-  m_defHandler->setTimeArr (m_timeArrProto.clone ());
-  m_defHandler->setSSP (m_sspProto.clone ());
-  m_randomGenProto.AssignStreams (m_wossRandomGenStream);
-  m_defHandler->setRandGenerator (m_randomGenProto.clone ());
-
-  m_wossController = new woss::WossController ();
+  m_randomGenProto->AssignStreams (m_wossRandomGenStream);
+  m_defHandler.setRandGenerator (std::move (m_randomGenProto));
 
 #if defined (WOSS_NETCDF_SUPPORT)
   NS_LOG_DEBUG ("Setting BathymetryDbCreator");
 
   if ( m_bathyDbFilePath != WH_STRING_DEFAULT )
     {
-      m_bathyDbCreator = new woss::BathyGebcoDbCreator ();
-
       m_bathyDbCreator->setDbPathName (m_bathyDbFilePath);
       m_bathyDbCreator->setDebug (m_bathyDbCreatorDebug);
       m_bathyDbCreator->setWossDebug (m_bathyDbDebug);
@@ -416,8 +340,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
   if ( m_sedimDbCoordFilePath != WH_STRING_DEFAULT && m_sedimDbMarsdenFilePath != WH_STRING_DEFAULT
        && m_sedimDbMarsdenOneFilePath != WH_STRING_DEFAULT )
     {
-      m_sedimDbCreator = new woss::SedimDeck41DbCreator ();
-
       m_sedimDbCreator->setDeck41CoordPathName (m_sedimDbCoordFilePath);
       m_sedimDbCreator->setDeck41MarsdenPathName (m_sedimDbMarsdenFilePath);
       m_sedimDbCreator->setDeck41MarsdenOnePathName (m_sedimDbMarsdenOneFilePath);
@@ -434,12 +356,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 
   if ( m_sspDbFilePath != WH_STRING_DEFAULT )
     {
-#if defined (WOSS_NETCDF4_SUPPORT)
-      m_sspDbCreator = new woss::SspWoa2005DbCreator ((woss::WOADbType)m_sspWoaDbType);
-#else
-      m_sspDbCreator = new woss::SspWoa2005DbCreator ();
-#endif // defined (WOSS_NETCDF_SUPPORT)
-
       m_sspDbCreator->setDbPathName (m_sspDbFilePath);
       m_sspDbCreator->setDebug (m_sspDbCreatorDebug);
       m_sspDbCreator->setWossDebug (m_sspDbDebug);
@@ -458,8 +374,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
         {
           NS_LOG_DEBUG ("Setting TimeArr binary");
 
-          m_resDbCreatorTimeArrBin = new woss::ResTimeArrBinDbCreator ();
-
           m_resDbCreatorTimeArrBin->setDbPathName (m_resDbFilePath + "/" + m_resDbFileName);
           m_resDbCreatorTimeArrBin->setDebug (m_resDbCreatorDebug);
           m_resDbCreatorTimeArrBin->setWossDebug (m_resDbDebug);
@@ -469,8 +383,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
       else if ( m_resDbUseBinary == false && m_resDbUseTimeArr == true )
         {
           NS_LOG_DEBUG ("Setting TimeArr ASCII");
-
-          m_resDbCreatorTimeArrTxt = new woss::ResTimeArrTxtDbCreator ();
 
           m_resDbCreatorTimeArrTxt->setDbPathName (m_resDbFilePath + "/" +  m_resDbFileName);
           m_resDbCreatorTimeArrTxt->setDebug (m_resDbCreatorDebug);
@@ -482,8 +394,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
         {
           NS_LOG_DEBUG ("Setting Pressure binary");
 
-          m_resDbCreatorPressBin = new woss::ResPressureBinDbCreator ();
-
           m_resDbCreatorPressBin->setDbPathName (m_resDbFilePath + "/" + m_resDbFileName);
           m_resDbCreatorPressBin->setDebug (m_resDbCreatorDebug);
           m_resDbCreatorPressBin->setWossDebug (m_resDbDebug);
@@ -494,8 +404,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
         {
           NS_LOG_DEBUG ("Setting Pressure ASCII");
 
-          m_resDbCreatorPressTxt = new woss::ResPressureTxtDbCreator ();
-
           m_resDbCreatorPressTxt->setDbPathName (m_resDbFilePath + "/" + m_resDbFileName);
           m_resDbCreatorPressTxt->setDebug (m_resDbCreatorDebug);
           m_resDbCreatorPressTxt->setWossDebug (m_resDbDebug);
@@ -505,8 +413,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
     }
 
   NS_LOG_DEBUG ("Setting Bellhop Creator");
-
-  m_bellhopCreator = new woss::BellhopCreator ();
 
   m_bellhopCreator->setDebug (m_wossCreatorDebug);
   m_bellhopCreator->setWossDebug (m_wossDebug);
@@ -546,8 +452,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 
   NS_LOG_DEBUG ("Setting WossDbManager");
 
-  m_wossDbManager = new woss::WossDbManager ();
-
   m_wossDbManager->setDebug (m_wossDbManagerDebug);
 
   m_wossController->setWossDbManager (m_wossDbManager);
@@ -555,8 +459,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
   if (m_wossManagerUseMultiThread == false)
     {
       NS_LOG_DEBUG ("Setting WossManager Single Threaded");
-
-      m_wossManagerSimple = new woss::WossManagerSimple<woss::WossManagerResDb> ();
 
       m_wossManagerSimple->setDebugFlag (m_wossManagerDebug);
       m_wossManagerSimple->setTimeEvolutionActiveFlag (m_isTimeEvolutionActive);
@@ -569,8 +471,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
     {
       NS_LOG_DEBUG ("Setting WossManager Multi Threaded");
 
-      m_wossManagerMulti = new woss::WossManagerSimple<woss::WossManagerResDbMT> ();
-
       m_wossManagerMulti->setDebugFlag (m_wossManagerDebug);
       m_wossManagerMulti->setTimeEvolutionActiveFlag (m_isTimeEvolutionActive);
       m_wossManagerMulti->setSpaceSampling (m_wossManagerSpaceSampling);
@@ -581,8 +481,6 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
     }
 
   NS_LOG_DEBUG ("Setting TransducerHandler");
-
-  m_wossTransducerHndl = new woss::TransducerHandler ();
 
   m_wossTransducerHndl->setDebug (m_wossTransducerHndlDebug);
   m_wossController->setTransducerHandler (m_wossTransducerHndl);
@@ -600,51 +498,35 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
 }
 
 
-WossLocation*
+std::shared_ptr<WossLocation>
 WossHelper::GetWossLocation ( Ptr< MobilityModel > ptr )
 {
   NS_LOG_FUNCTION (this << ptr);
-
-  WossLocation* retValue = nullptr;
 
   MLMCIter it = m_locMap.find (PeekPointer (ptr));
 
   if ( it == m_locMap.end () )
     {
-      NS_LOG_DEBUG ("WossController MobilityModel* not found, creating new WossLocation. map size " << m_locMap.size ());
+      NS_LOG_DEBUG ("WossController MobilityModel not found, creating new WossLocation. map size " << m_locMap.size ());
 
-      retValue = new WossLocation ( ptr );
-      m_locMap.insert ( ::std::make_pair ( PeekPointer (ptr), retValue ));
+      auto retValue = std::make_shared<WossLocation> ( ptr );
+      m_locMap.insert ( std::make_pair ( PeekPointer (ptr), retValue ));
+      return retValue;
     }
   else
     {
-      retValue = it->second;
-    }
-
-  return retValue;
-}
-
-
-void
-WossHelper::DeleteWossLocationMap (void)
-{
-  for ( MLMCIter it = m_locMap.begin (); it != m_locMap.end (); ++it )
-    {
-      if (it->second != nullptr)
-        {
-          delete it->second;
-        }
+      return it->second;
     }
 }
 
 
 bool
-WossHelper::SetAngles (const ::std::string &angleString, Ptr<MobilityModel> tx, Ptr<MobilityModel> rx)
+WossHelper::SetAngles (const std::string &angleString, Ptr<MobilityModel> tx, Ptr<MobilityModel> rx)
 {
   CheckInitialized ();
 
-  ::std::string angleTmp = angleString;
-  ::std::string::size_type tmp;
+  std::string angleTmp = angleString;
+  std::string::size_type tmp;
   double param[2];
 
   for (int cnt = 0; cnt < 2; ++cnt)
@@ -658,7 +540,7 @@ WossHelper::SetAngles (const ::std::string &angleString, Ptr<MobilityModel> tx, 
 
       std::string paramStr = angleTmp.substr (0, tmp);
       angleTmp = angleTmp.substr (tmp + 1, angleTmp.npos);
-      param[cnt] = ::std::atof (paramStr.c_str ());
+      param[cnt] = std::atof (paramStr.c_str ());
 
       NS_LOG_DEBUG ("cnt:" << cnt << "; param:" << param[cnt]);
     }
@@ -681,13 +563,13 @@ WossHelper::SetAngles ( const woss::CustomAngles& angles, Ptr<MobilityModel> tx,
         }
       else
         {
-          WossLocation* rxLoc = GetWossLocation ( rx );
+          auto rxLoc = GetWossLocation ( rx );
           m_bellhopCreator->setAngles (angles, woss::BellhopCreator::CCAngles::ALL_LOCATIONS, rxLoc );
         }
     }
   else
     {
-      WossLocation* txLoc = GetWossLocation ( tx );
+      auto txLoc = GetWossLocation ( tx );
 
       if ( rx == nullptr )
         {
@@ -695,7 +577,7 @@ WossHelper::SetAngles ( const woss::CustomAngles& angles, Ptr<MobilityModel> tx,
         }
       else
         {
-          WossLocation* rxLoc = GetWossLocation ( rx );
+          auto rxLoc = GetWossLocation ( rx );
           m_bellhopCreator->eraseAngles ( txLoc, rxLoc );
         }
     }
@@ -717,13 +599,13 @@ WossHelper::GetAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx ) const
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           return m_bellhopCreator->getAngles (woss::BellhopCreator::CCAngles::ALL_LOCATIONS, rxLoc );
         }
     }
   else
     {
-      WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
+      auto txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
       if ( rx == nullptr )
         {
@@ -731,7 +613,7 @@ WossHelper::GetAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx ) const
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           return m_bellhopCreator->getAngles ( txLoc, rxLoc );
         }
     }
@@ -751,13 +633,13 @@ WossHelper::EraseAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           m_bellhopCreator->eraseAngles (woss::BellhopCreator::CCAngles::ALL_LOCATIONS, rxLoc );
         }
     }
   else
     {
-      WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
+      auto txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
       if ( rx == nullptr )
         {
@@ -765,21 +647,21 @@ WossHelper::EraseAngles ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           m_bellhopCreator->eraseAngles ( txLoc, rxLoc );
         }
     }
 }
 
 bool
-WossHelper::ImportTransducerAscii (const ::std::string &typeName, const std::string &fileName)
+WossHelper::ImportTransducerAscii (const std::string &typeName, const std::string &fileName)
 {
   CheckInitialized ();
 
   return m_wossTransducerHndl->importValueAscii (typeName, fileName);
 }
 
-bool WossHelper::ImportTransducerBinary (const ::std::string &typeName, const std::string &fileName)
+bool WossHelper::ImportTransducerBinary (const std::string &typeName, const std::string &fileName)
 {
   CheckInitialized ();
 
@@ -787,13 +669,13 @@ bool WossHelper::ImportTransducerBinary (const ::std::string &typeName, const st
 }
 
 bool
-WossHelper::SetCustomTransducer ( const ::std::string &transducerString, Ptr<MobilityModel> tx, Ptr<MobilityModel> rx)
+WossHelper::SetCustomTransducer ( const std::string &transducerString, Ptr<MobilityModel> tx, Ptr<MobilityModel> rx)
 {
   CheckInitialized ();
 
-  ::std::string transducerType;
-  ::std::string transTmp = transducerString;
-  ::std::string::size_type tmp;
+  std::string transducerType;
+  std::string transTmp = transducerString;
+  std::string::size_type tmp;
   double param[5];
 
   tmp = transTmp.find ("|");
@@ -822,7 +704,7 @@ WossHelper::SetCustomTransducer ( const ::std::string &transducerString, Ptr<Mob
 
       std::string paramStr = transTmp.substr (0, tmp);
       transTmp = transTmp.substr (tmp + 1, transTmp.npos);
-      param[cnt] = ::std::atof (paramStr.c_str ());
+      param[cnt] = std::atof (paramStr.c_str ());
 
       NS_LOG_DEBUG ("cnt:" << cnt << "; param:" << param[cnt]);
     }
@@ -846,13 +728,13 @@ WossHelper::SetCustomTransducer ( const woss::CustomTransducer& type, Ptr<Mobili
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           m_bellhopCreator->setCustomTransducer (type, woss::BellhopCreator::CCTransducer::ALL_LOCATIONS, rxLoc );
         }
     }
   else
     {
-      WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
+      auto txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
       if ( rx == nullptr )
         {
@@ -860,7 +742,7 @@ WossHelper::SetCustomTransducer ( const woss::CustomTransducer& type, Ptr<Mobili
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           m_bellhopCreator->setCustomTransducer ( type, txLoc, rxLoc );
         }
     }
@@ -882,13 +764,13 @@ WossHelper::GetCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           return m_bellhopCreator->getCustomTransducer (woss::BellhopCreator::CCTransducer::ALL_LOCATIONS, rxLoc );
         }
     }
   else
     {
-      WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
+      auto txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
       if ( rx == nullptr )
         {
@@ -896,7 +778,7 @@ WossHelper::GetCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx )
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           return m_bellhopCreator->getCustomTransducer ( txLoc, rxLoc );
         }
     }
@@ -916,13 +798,13 @@ WossHelper::EraseCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           m_bellhopCreator->eraseCustomTransducer (woss::BellhopCreator::CCTransducer::ALL_LOCATIONS, rxLoc );
         }
     }
   else
     {
-      WossLocation* txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
+      auto txLoc = const_cast<WossHelper*> (this)->GetWossLocation ( tx );
 
       if ( rx == nullptr )
         {
@@ -930,7 +812,7 @@ WossHelper::EraseCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx
         }
       else
         {
-          WossLocation* rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
+          auto rxLoc = const_cast<WossHelper*> (this)->GetWossLocation ( rx );
           m_bellhopCreator->eraseCustomTransducer ( txLoc, rxLoc );
         }
     }
@@ -938,7 +820,7 @@ WossHelper::EraseCustomTransducer ( Ptr<MobilityModel> tx, Ptr<MobilityModel> rx
 
 
 bool
-WossHelper::SetCustomAltimetry (woss::Altimetry* const altimetry, const woss::Coord& txCoord, double bearing,
+WossHelper::SetCustomAltimetry (const woss::Altimetry& altimetry, const woss::Coord& txCoord, double bearing,
                                 double range)
 {
   CheckInitialized ();
@@ -947,7 +829,7 @@ WossHelper::SetCustomAltimetry (woss::Altimetry* const altimetry, const woss::Co
 }
 
 
-woss::Altimetry*
+std::unique_ptr<woss::Altimetry>
 WossHelper::GetCustomAltimetry (const woss::Coord& txCoord, double bearing, double range)
 {
   CheckInitialized ();
@@ -966,7 +848,7 @@ WossHelper::EraseCustomAltimetry (const woss::Coord& txCoord, double bearing, do
 
 
 bool
-WossHelper::SetCustomSediment (woss::Sediment* const sediment, const woss::Coord& txCoord, double bearing,
+WossHelper::SetCustomSediment (const woss::Sediment& sediment, const woss::Coord& txCoord, double bearing,
                                double range)
 {
   CheckInitialized ();
@@ -976,15 +858,15 @@ WossHelper::SetCustomSediment (woss::Sediment* const sediment, const woss::Coord
 
 
 bool
-WossHelper::SetCustomSediment (const ::std::string &sedimentString, const woss::Coord& txCoord, double bearing, double range)
+WossHelper::SetCustomSediment (const std::string &sedimentString, const woss::Coord& txCoord, double bearing, double range)
 {
   NS_LOG_FUNCTION (this);
 
   CheckInitialized ();
 
-  ::std::string sedimentType;
-  ::std::string sedimTmp = sedimentString;
-  ::std::string::size_type tmp;
+  std::string sedimentType;
+  std::string sedimTmp = sedimentString;
+  std::string::size_type tmp;
   double param[5];
 
   tmp = sedimTmp.find ("|");
@@ -1010,18 +892,18 @@ WossHelper::SetCustomSediment (const ::std::string &sedimentString, const woss::
 
       std::string paramStr = sedimTmp.substr (0, tmp);
       sedimTmp = sedimTmp.substr (tmp + 1, sedimTmp.npos);
-      param[cnt] = ::std::atof (paramStr.c_str ());
+      param[cnt] = std::atof (paramStr.c_str ());
 
       NS_LOG_DEBUG ("cnt:" << cnt << "; param:" << param[cnt]);
     }
 
   woss::Sediment sediment = woss::Sediment ( sedimentType, param[0], param[1], param[2], param[3], param[4]);
 
-  return m_wossDbManager->setCustomSediment (sediment.clone (), txCoord, bearing, range);
+  return m_wossDbManager->setCustomSediment (sediment, txCoord, bearing, range);
 }
 
 
-woss::Sediment*
+std::unique_ptr<woss::Sediment>
 WossHelper::GetCustomSediment (const woss::Coord& txCoord, double bearing, double range)
 {
   CheckInitialized ();
@@ -1040,7 +922,7 @@ WossHelper::EraseCustomSediment (const woss::Coord& txCoord, double bearing, dou
 
 
 bool
-WossHelper::SetCustomSsp (woss::SSP* const ssp, const woss::Coord& txCoord, double bearing,
+WossHelper::SetCustomSsp (const woss::SSP& ssp, const woss::Coord& txCoord, double bearing,
                           double range, const woss::Time& timeValue)
 {
   CheckInitialized ();
@@ -1050,7 +932,7 @@ WossHelper::SetCustomSsp (woss::SSP* const ssp, const woss::Coord& txCoord, doub
 
 
 bool
-WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txCoord, double bearing,
+WossHelper::SetCustomSsp (const std::string &sspString, const woss::Coord& txCoord, double bearing,
                           double range, const woss::Time& timeValue)
 {
   NS_LOG_FUNCTION (this);
@@ -1058,8 +940,8 @@ WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txC
   CheckInitialized ();
 
   woss::SSP ssp;
-  ::std::string sspTmp = sspString;
-  ::std::string::size_type tmp;
+  std::string sspTmp = sspString;
+  std::string::size_type tmp;
 
   int totalDepths = 0;
 
@@ -1072,7 +954,7 @@ WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txC
 
   std::string totDepths = sspTmp.substr (0, tmp);
   sspTmp = sspTmp.substr (tmp + 1, sspTmp.npos);
-  totalDepths = ::std::atoi (totDepths.c_str ());
+  totalDepths = std::atoi (totDepths.c_str ());
 
   NS_LOG_DEBUG ("totalDepths: " << totalDepths);
 
@@ -1096,7 +978,7 @@ WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txC
 
       std::string depthStr = sspTmp.substr (0, tmp);
       sspTmp = sspTmp.substr (tmp + 1, sspTmp.npos);
-      depth = ::std::atof (depthStr.c_str ());
+      depth = std::atof (depthStr.c_str ());
 
       tmp = sspTmp.find ("|");
       if ((tmp == std::string::npos) && (cnt != totalDepths - 1))
@@ -1107,7 +989,7 @@ WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txC
 
       std::string sspValueStr = sspTmp.substr (0, tmp);
       sspTmp = sspTmp.substr (tmp + 1, sspTmp.npos);
-      sspValue = ::std::atof (sspValueStr.c_str ());
+      sspValue = std::atof (sspValueStr.c_str ());
 
       NS_LOG_DEBUG ("cnt:" << cnt << "; depth:" << depth << "; sspValue:" << sspValue);
 
@@ -1122,12 +1004,12 @@ WossHelper::SetCustomSsp (const ::std::string &sspString, const woss::Coord& txC
         }
     }
 
-  return m_wossDbManager->setCustomSSP (ssp.clone (), txCoord, bearing, range, timeValue);
+  return m_wossDbManager->setCustomSSP (ssp, txCoord, bearing, range, timeValue);
 }
 
 
 bool
-WossHelper::ImportCustomSsp (const ::std::string &sspFileName, const woss::Coord& txCoord, double bearing, const woss::Time& timeValue)
+WossHelper::ImportCustomSsp (const std::string &sspFileName, const woss::Coord& txCoord, double bearing, const woss::Time& timeValue)
 {
   CheckInitialized ();
 
@@ -1135,7 +1017,7 @@ WossHelper::ImportCustomSsp (const ::std::string &sspFileName, const woss::Coord
 }
 
 
-woss::SSP*
+std::unique_ptr<woss::SSP>
 WossHelper::GetCustomSsp (const woss::Coord& txCoord, double bearing,
                           double range, const woss::Time& timeValue)
 {
@@ -1156,7 +1038,7 @@ WossHelper::EraseCustomSsp (const woss::Coord& txCoord, double bearing,
 
 
 bool
-WossHelper::SetCustomBathymetry (woss::Bathymetry* const bathymetry, const woss::Coord& txCoord,
+WossHelper::SetCustomBathymetry (const woss::Bathymetry& bathymetry, const woss::Coord& txCoord,
                                  double bearing,  double range)
 {
   CheckInitialized ();
@@ -1166,14 +1048,14 @@ WossHelper::SetCustomBathymetry (woss::Bathymetry* const bathymetry, const woss:
 
 
 bool
-WossHelper::SetCustomBathymetry (const ::std::string &bathyLine, const woss::Coord& txCoord, double bearing)
+WossHelper::SetCustomBathymetry (const std::string &bathyLine, const woss::Coord& txCoord, double bearing)
 {
   NS_LOG_FUNCTION (this);
 
   CheckInitialized ();
 
-  ::std::string bathyTmp = bathyLine;
-  ::std::string::size_type tmp;
+  std::string bathyTmp = bathyLine;
+  std::string::size_type tmp;
 
   int totalRanges = 0;
 
@@ -1188,7 +1070,7 @@ WossHelper::SetCustomBathymetry (const ::std::string &bathyLine, const woss::Coo
 
   std::string totRanges = bathyTmp.substr (0, tmp);
   bathyTmp = bathyTmp.substr (tmp + 1, bathyTmp.npos);
-  totalRanges = ::std::atoi (totRanges.c_str ());
+  totalRanges = std::atoi (totRanges.c_str ());
 
   NS_LOG_DEBUG ("totalRanges: " << totalRanges);
 
@@ -1212,7 +1094,7 @@ WossHelper::SetCustomBathymetry (const ::std::string &bathyLine, const woss::Coo
 
       std::string rangeStr = bathyTmp.substr (0, tmp);
       bathyTmp = bathyTmp.substr (tmp + 1, bathyTmp.npos);
-      range = ::std::atof (rangeStr.c_str ());
+      range = std::atof (rangeStr.c_str ());
 
       tmp = bathyTmp.find ("|");
       if ((tmp == std::string::npos) && (cnt != totalRanges - 1))
@@ -1223,7 +1105,7 @@ WossHelper::SetCustomBathymetry (const ::std::string &bathyLine, const woss::Coo
 
       std::string depthStr = bathyTmp.substr (0, tmp);
       bathyTmp = bathyTmp.substr (tmp + 1, bathyTmp.npos);
-      depth = ::std::atof (depthStr.c_str ());
+      depth = std::atof (depthStr.c_str ());
 
       NS_LOG_DEBUG ("cnt:" << cnt << "; range:" << range << "; depth:" << depth);
 
@@ -1234,7 +1116,7 @@ WossHelper::SetCustomBathymetry (const ::std::string &bathyLine, const woss::Coo
         }
       else
         {
-          m_wossDbManager->setCustomBathymetry (&depth, txCoord, bearing, range);
+          m_wossDbManager->setCustomBathymetry (depth, txCoord, bearing, range);
         }
     }
 
@@ -1243,7 +1125,7 @@ WossHelper::SetCustomBathymetry (const ::std::string &bathyLine, const woss::Coo
 
 
 bool
-WossHelper::ImportCustomBathymetry (const ::std::string &bathyFile, const woss::Coord& txCoord, double bearing)
+WossHelper::ImportCustomBathymetry (const std::string &bathyFile, const woss::Coord& txCoord, double bearing)
 {
   CheckInitialized ();
 
@@ -1251,7 +1133,7 @@ WossHelper::ImportCustomBathymetry (const ::std::string &bathyFile, const woss::
 }
 
 
-woss::Bathymetry*
+woss::Bathymetry
 WossHelper::GetCustomBathymetry (const woss::Coord& txCoord, double bearing, double range)
 {
   CheckInitialized ();
@@ -1270,28 +1152,28 @@ WossHelper::EraseCustomBathymetry (const woss::Coord& txCoord, double bearing, d
 
 
 bool
-WossHelper::CreateDirectory (const ::std::string& path)
+WossHelper::CreateDirectory (const std::string& path)
 {
   NS_LOG_FUNCTION (this);
 
   NS_ASSERT (path.size () > 0);
 
-  int ret_value = -1;
-  static ::std::stringstream str_out;
+  int retValue = -1;
+  static std::stringstream strOut;
 
-  str_out << "mkdir -p " << path;
+  strOut << "mkdir -p " << path;
 
-  ::std::string command = str_out.str ();
-  str_out.str ("");
+  std::string command = strOut.str ();
+  strOut.str ("");
 
   NS_LOG_DEBUG ("WossHelper::CreateDirectory () command = " << command);
 
   if (system (nullptr))
     {
-      ret_value = system (command.c_str ());
+      retValue = system (command.c_str ());
     }
 
-  return ( ret_value == 0 );
+  return ( retValue == 0 );
 }
 
 
