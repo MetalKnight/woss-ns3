@@ -69,7 +69,7 @@ public:
   /**
    * This function is not supported by the UAN-WOSS framework
    */
-  virtual double GetPathLossDb (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode);
+  virtual double GetPathLossDb (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode) override;
 
   /**
    * This function returns the Power Delay Profile between the two input nodes
@@ -78,7 +78,7 @@ public:
    * \param mode transmission mode
    * \returns the Power Delay Profile
    */
-  virtual UanPdp GetPdp (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode);
+  virtual UanPdp GetPdp (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode) override;
 
   /**
    * New function that takes advantage of the WOSS multithread feature.
@@ -93,7 +93,7 @@ public:
   /**
    * This function is not supported by the UAN-WOSS framework
    */
-  virtual Time GetDelay (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode);
+  virtual Time GetDelay (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode) override;
 
   /**
    * This function should be used as for time delay purposes
@@ -111,7 +111,7 @@ public:
 protected:
   std::shared_ptr<woss::WossManager> m_wossManager; //!< woss::WossManager object used to trigger acoustic channel computations
 
-  virtual void DoInitialize (void);
+  virtual void DoInitialize (void) override;
 
   /**
    * Converts a ns3::UanPdp from a woss::TimeArr object, and symbol time in seconds

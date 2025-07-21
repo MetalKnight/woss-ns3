@@ -45,15 +45,6 @@ WossWaypointMobilityModel::GetTypeId (void)
   return tid;
 }
 
-
-WossWaypointMobilityModel::WossWaypointMobilityModel ()
-{
-}
-
-WossWaypointMobilityModel::~WossWaypointMobilityModel ()
-{
-}
-
 void
 WossWaypointMobilityModel::DoDispose (void)
 {

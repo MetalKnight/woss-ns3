@@ -58,9 +58,9 @@ public:
   /**
    * \returns the Vector position in cartesian coordinates
    */
-  virtual Vector GetNext (void) const;
+  virtual Vector GetNext (void) const override;
 
-  virtual int64_t AssignStreams (int64_t stream);
+  virtual int64_t AssignStreams (int64_t stream) override;
 
 protected:
   ListPositionAllocator m_listAllocator; //!< the list allocator
@@ -173,9 +173,9 @@ public:
   /**
    * \returns the next position in cartesian coordinates
    */
-  virtual Vector GetNext (void) const;
+  virtual Vector GetNext (void) const override;
 
-  virtual int64_t AssignStreams (int64_t stream);
+  virtual int64_t AssignStreams (int64_t stream) override;
 
 protected:
   mutable uint32_t m_current; //!<
@@ -203,9 +203,9 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  WossRandomRectanglePositionAllocator (); //!< Default constructor
+  WossRandomRectanglePositionAllocator () = default; //!< Default constructor
 
-  virtual ~WossRandomRectanglePositionAllocator (); //!< Default destructor
+  virtual ~WossRandomRectanglePositionAllocator () = default; //!< Default destructor
 
   /**
    * \param lat the random variable must return valid latitude values in decimal degrees
@@ -230,8 +230,8 @@ public:
   /**
    * \returns the position in cartesian coordinates
    */
-  virtual Vector GetNext (void) const;
-  virtual int64_t AssignStreams (int64_t stream);
+  virtual Vector GetNext (void) const override;
+  virtual int64_t AssignStreams (int64_t stream) override;
 
 protected:
   double m_Depth; //!< grid depth in meters
@@ -254,9 +254,9 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  WossRandomBoxPositionAllocator (); //!< Default constructor
+  WossRandomBoxPositionAllocator () = default; //!< Default constructor
 
-  virtual ~WossRandomBoxPositionAllocator (); //!< Default destructor
+  virtual ~WossRandomBoxPositionAllocator () = default; //!< Default destructor
 
   /**
    * \param latitude the random variable must return valid latitude values in decimal degrees
@@ -276,8 +276,8 @@ public:
   /**
    * \returns the position in cartesian coordinates
    */
-  virtual Vector GetNext (void) const;
-  virtual int64_t AssignStreams (int64_t stream);
+  virtual Vector GetNext (void) const override;
+  virtual int64_t AssignStreams (int64_t stream) override;
 
 
 protected:
@@ -300,9 +300,9 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  WossRandomDiscPositionAllocator (); //!< Default constructor
+  WossRandomDiscPositionAllocator () = default; //!< Default constructor
 
-  virtual ~WossRandomDiscPositionAllocator (); //!< Default destructor
+  virtual ~WossRandomDiscPositionAllocator () = default; //!< Default destructor
 
   /**
    * \param bearing the random variable must return valid bearing values in decimal degrees [0.0-360.0]
@@ -347,9 +347,9 @@ public:
   /**
    * \returns the position in cartesian coordinates
    */
-  virtual Vector GetNext (void) const;
+  virtual Vector GetNext (void) const override;
 
-  virtual int64_t AssignStreams (int64_t stream);
+  virtual int64_t AssignStreams (int64_t stream) override;
 
 protected:
   Ptr<RandomVariableStream> m_Bearing; //!< random variable that generates a random bearer in [0.0 - 360.0]
@@ -375,7 +375,7 @@ public:
 
   WossUniformDiscPositionAllocator (); //!< Default constructor
 
-  virtual ~WossUniformDiscPositionAllocator (); //!< Default destructor
+  virtual ~WossUniformDiscPositionAllocator () = default; //!< Default destructor
 
 
   /**

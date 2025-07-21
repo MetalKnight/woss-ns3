@@ -57,7 +57,7 @@ public:
    * Sends a packet out on the channel
    */
   virtual void TxPacket  (Ptr<UanTransducer> src, Ptr<Packet> packet, double txPowerDb,
-                          UanTxMode txmode);
+                          UanTxMode txmode) override;
 
 protected:
   /**
@@ -68,7 +68,7 @@ protected:
 
   Ptr<WossPropModel> m_wossPropModel; //!< Smart ptr to a WossPropModel object
 
-  virtual void DoInitialize (void);
+  virtual void DoInitialize (void) override;
 };
 
 }

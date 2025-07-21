@@ -297,13 +297,6 @@ WossRandomRectanglePositionAllocator::GetTypeId (void)
   return tid;
 }
 
-WossRandomRectanglePositionAllocator::WossRandomRectanglePositionAllocator ()
-{
-}
-
-WossRandomRectanglePositionAllocator::~WossRandomRectanglePositionAllocator ()
-{
-}
 
 void
 WossRandomRectanglePositionAllocator::SetLatitude (Ptr<RandomVariableStream> lat)
@@ -383,12 +376,6 @@ WossRandomBoxPositionAllocator::GetTypeId (void)
   return tid;
 }
 
-WossRandomBoxPositionAllocator::WossRandomBoxPositionAllocator ()
-{
-}
-WossRandomBoxPositionAllocator::~WossRandomBoxPositionAllocator ()
-{
-}
 
 void
 WossRandomBoxPositionAllocator::SetLatitude (Ptr<RandomVariableStream> lat)
@@ -471,14 +458,6 @@ WossRandomDiscPositionAllocator::GetTypeId (void)
                    MakeDoubleChecker<double>  ())
   ;
   return tid;
-}
-
-WossRandomDiscPositionAllocator::WossRandomDiscPositionAllocator ()
-{
-}
-
-WossRandomDiscPositionAllocator::~WossRandomDiscPositionAllocator ()
-{
 }
 
 void
@@ -583,10 +562,6 @@ WossUniformDiscPositionAllocator::WossUniformDiscPositionAllocator ()
 {
   m_BearVar = CreateObject<UniformRandomVariable> ();
   m_RangeVar = CreateObject<UniformRandomVariable> ();
-}
-
-WossUniformDiscPositionAllocator::~WossUniformDiscPositionAllocator ()
-{
 }
 
 void

@@ -49,16 +49,16 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  WossWaypointMobilityModel (); //!< Default constructor
+  WossWaypointMobilityModel () = default; //!< Default constructor
 
-  virtual ~WossWaypointMobilityModel (); //!< Default destructor
+  virtual ~WossWaypointMobilityModel () = default; //!< Default destructor
 
 
 private:
   friend class WaypointMobilityModelNotifyTest; //!< To allow Update() calls and access to m_current
 
-  virtual void Update (void) const;
-  virtual void DoDispose (void);
+  virtual void Update (void) const override;
+  virtual void DoDispose (void) override;
 
 
 };
