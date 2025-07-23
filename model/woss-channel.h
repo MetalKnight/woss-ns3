@@ -41,7 +41,7 @@ class WossChannel : public UanChannel
 {
 public:
   WossChannel (); //!< Default Constructor
-  virtual ~WossChannel (); //!< Default destructor
+  virtual ~WossChannel () = default; //!< Default destructor
 
   /**
    * Register this type.

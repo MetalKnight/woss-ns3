@@ -13,12 +13,12 @@ WOSS has been already integrated in NS-Miracle [4]_ a popular |ns2| extension de
 Model Description
 *****************
 
-The source code for the Woss Integration Framework lives in the directory
-``src/WOSS/``
+The source code for the WOSS NS3 Integration Framework lives in the directory
+``src/woss-ns3/``
 
-The WOSS Integration Framework is composed of two main parts:
+The WOSS NS3 Integration Framework is composed of two main parts:
 
-* the wrapper classes, located in ``src/WOSS/definitions`` containing all the wrappers needed by
+* the wrapper classes, located in ``src/woss-ns3/definitions`` containing all the wrappers needed by
   the WOSS framework in order to be fully integrated into the host network simulator. These classes enable
   the WOSS framework to use the host's model of time, random generator, mobility, spatial coordinates etc...
 
@@ -29,15 +29,15 @@ The WOSS Integration Framework is composed of two main parts:
 License
 *******
 
-WOSS and WOSS Integration Framework are licensed under the GPLv2 license.
+WOSS and WOSS NS3 Integration Framework are licensed under the GPLv2 license.
 
 
 
 Design
 ======
 
-WOSS Propagation Model
-######################
+WOSS NS3 Propagation Model
+##########################
 the ``ns3::WossPropModel`` interface extends the API defined in ``ns3::UanPropModel``.
 The propagation model provide a power delay profile (PDP) and pathloss
 information.  The PDP is retrieved using the ``GetPdpVector`` method which returns type ``ns3::UanPdpVector``
@@ -47,10 +47,10 @@ the given transmitter node and receiver nodes.
 the ``GetDelay`` function computes the acoustic propagation delay between two geographical coordinates
 ``woss::CoordZ``. The delay represents the first channel tap that exceeds the input SNR threshold.
 
-WOSS position allocators
-########################
+WOSS NS3 position allocators
+############################
 
-the WOSS Integration Framework extends the standard |ns3| position allocators in order to work with geographical
+the WOSS NS3 Integration Framework extends the standard |ns3| position allocators in order to work with geographical
 coordinates ``woss::CoordZ``:
 
 #. ``ns3::WossListPositionAllocator`` - list allocator
@@ -65,8 +65,8 @@ coordinates ``woss::CoordZ``:
 
 #. ``ns3::WossUniformDiscPositionAllocator`` - uniform disc allocator
 
-WOSS mobility models
-####################
+WOSS NS3 mobility models
+########################
 
 The ``ns3::WossWaypointMobilityModel`` extends the ``ns3::WaypointMobilityModel`` allowing the user to
 to use geographical coordinates
@@ -79,19 +79,14 @@ How to Install
    NetCDF support must be installed depending on previous step.
 #. for more info on the previous step please see [7]_
 #. clone this repository into the ``<ns3-dir>/src/`` path
-#. example of installation with NetCDF legacy:
-   ``./waf -d debug --enable-tests --enable-examples --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf-lib=<netcdf_installed_lib_path> --with-netcdf-include=<netcdf_installed_include_path> configure``
-#. example of installation with NetCDF4 + HDF5, pay attention to the ``CXXFLAGS`` inline redefinition
-   due to a unresolved NetCDF-C++4 API warning:
+#. example of installation with CMake and NetCDF4:
+   ``CXXFLAGS="-Wno-unused-variable" ./ns3 configure --enable-examples --enable-tests -- -DNS3_WITH_WOSS_SOURCE=<woss_source_path> -DNS3_WITH_WOSS_LIBRARY=<woss_lib_path> -DNS3_WITH_NETCDF4_INSTALL=<netcdf4_and_hdf5_installed_path>``
+#. run ``./ns3 build``
+#. example of installation with waf and NetCDF4 (obsolete):
    ``./waf configure --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path> --with-netcdf4-install=<netcdf4_and_hdf5_installed_path> CXXFLAGS="-Wall -Werror -Wno-unused-variable``
+#. ``./waf build``
 #. for info on how to install all the required libraries with the suggested paths, please check [7]_
 
-where:
-#. ``--with-woss-source=<woss_source_path>`` is mandatory
-#. ``--with-woss-library=<woss_lib_path>`` is mandatory
-#. ``--with-netcdf-lib=<netcdf_installed_lib_path>`` is optional
-#. ``--with-netcdf-include=<netcdf_installed_include_path>`` is optional
-#. ``--with-netcdf4-install=<netcdf4_and_hdf5_installed_path>`` is optional
 
 Future Work
 ===========
@@ -117,10 +112,10 @@ The main way that users who write simulation scripts will typically
 interact with the WOSS Framework is through the helper API and through
 the publicly visible attributes of the model.
 
-The helper API is defined in ``src/woss/helper/woss-helper.{cc,h}``
+The helper API is defined in ``src/woss-ns3/helper/woss-helper.{cc,h}``
 
-The example folder ``src/woss/examples/`` contain some basic code that shows how to set up and use the models.
-further examples can be found into the Unit tests in ``src/woss/test/...cc``
+The example folder ``src/woss-ns3/examples/`` contain some basic code that shows how to set up and use the models.
+further examples can be found into the Unit tests in ``src/woss-ns3/test/...cc``
 
 Examples
 ========
@@ -131,7 +126,7 @@ WOSS integration Example
 ########################
 
 * ``woss-aloha-example``:
-    We show how to use the WOSS helper, along with the introduced position allocators
+    We show how to use the WOSS NS3 helper, along with the introduced position allocators
     and waypoint mobility. We also show how to create a custom acoustic environment, by creating
     a bathymetrical grid and a custom sediment layer.
 

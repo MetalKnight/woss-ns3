@@ -61,6 +61,7 @@ public:
 
   std::string m_databasePath; //!< The path to the WOSS databases.
   bool m_useMultithread; //!< Enable/disable WOSS multithread feature.
+  bool m_useThreadPool; //!< Enable/disable WOSS multithread thread pool feature.
   bool m_useTimeEvolution; //!< Enable/disable the WOSS time evolution feature.
   uint32_t m_bytesTotal; //!< Total number of bytes received in a simulation run.
   UanTxMode m_dataMode; //!< List of UanTxModes used for data channels.

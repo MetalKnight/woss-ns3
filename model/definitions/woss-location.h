@@ -62,6 +62,7 @@ public:
   Ptr<MobilityModel> GetMobilityModel ();
 
 protected:
+
   Ptr<MobilityModel> m_mobModel;
 
 };

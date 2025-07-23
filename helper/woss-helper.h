@@ -552,6 +552,7 @@ private:
   int m_concurrentThreads; //!< number of concurrent threads (0 = auto).
   double m_wossManagerSpaceSampling; //!< woss manager space sampling in meters
   bool m_wossManagerUseMultiThread; //!< enable/disable the multithread feature
+  bool m_wossManagerUseThreadPool; //!< enable/disable multithread's thread pool feature
   std::shared_ptr<woss::WossManagerSimple<woss::WossManagerResDb> > m_wossManagerSimple; //!<  the helper will automatically allocate the desired woss manager based on current configuration.
   std::shared_ptr<woss::WossManagerSimple<woss::WossManagerResDbMT> > m_wossManagerMulti; //!<  the helper will automatically allocate the desired woss manaeger based on current configuration.
 

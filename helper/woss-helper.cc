@@ -266,6 +266,7 @@ WossHelper::WossHelper ()
     m_concurrentThreads (WH_CONCURRENT_THREADS_DEFAULT),
     m_wossManagerSpaceSampling (WH_SPACE_SAMPLING_DEFAULT),
     m_wossManagerUseMultiThread (false),
+    m_wossManagerUseThreadPool (true),
     m_wossManagerSimple (std::make_shared< woss::WossManagerSimple<woss::WossManagerResDb> > ()),
     m_wossManagerMulti (std::make_shared< woss::WossManagerSimple<woss::WossManagerResDbMT> > ()),
     m_wossTransducerHndlDebug (WH_DEBUG_DEFAULT),
@@ -475,6 +476,7 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
       m_wossManagerMulti->setTimeEvolutionActiveFlag (m_isTimeEvolutionActive);
       m_wossManagerMulti->setSpaceSampling (m_wossManagerSpaceSampling);
       m_wossManagerMulti->setConcurrentThreads (m_concurrentThreads);
+      m_wossManagerMulti->setUseThreadPoolFlag (m_wossManagerUseThreadPool);
 
       m_wossController->setWossManager (m_wossManagerMulti);
       wossPropModel->SetWossManager (m_wossManagerMulti);
@@ -1487,6 +1489,11 @@ WossHelper::GetTypeId ()
                    "A boolean that enables or disables the multithread feature",
                    BooleanValue (false),
                    MakeBooleanAccessor (&WossHelper::m_wossManagerUseMultiThread),
+                   MakeBooleanChecker () )
+    .AddAttribute ("WossManagerUseThreadPool",
+                   "A boolean that enables or disables the multithread thread pool feature",
+                   BooleanValue (true),
+                   MakeBooleanAccessor (&WossHelper::m_wossManagerUseThreadPool),
                    MakeBooleanChecker () )
     .AddAttribute ("WossTransHandlerDebug",
                    "A boolean that enables or disables the TransducerHandler's debug screen output",

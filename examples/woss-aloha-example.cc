@@ -62,6 +62,7 @@ Experiment::Experiment ()
     m_simTime (Seconds (5000)),
     m_databasePath (""),
     m_useMultithread (true),
+    m_useThreadPool (true),
     m_useTimeEvolution (false),
     m_bytesTotal (0),
     m_dataMode ()
@@ -102,8 +103,9 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
   wossHelper->SetAttribute ("WossBellhopArrSyntax", IntegerValue (2)); // Check woss::BellhopArrSyntax; 2 means bellhop output syntax >= march 2019
   wossHelper->SetAttribute ("WossBellhopShdSyntax", IntegerValue (1));
   wossHelper->SetAttribute ("WossManagerTimeEvoActive", BooleanValue (m_useTimeEvolution));
-  wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (4));
+  wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (0));
   wossHelper->SetAttribute ("WossManagerUseMultithread", BooleanValue (m_useMultithread));
+  wossHelper->SetAttribute ("WossManagerUseThreadPool", BooleanValue (m_useThreadPool));
 
   wossHelper->Initialize (wossProp);
 
@@ -309,6 +311,7 @@ main (int argc, char *argv[])
   cmd.AddValue ("TotalRate", "Total channel capacity", exp.m_totalRate);
   cmd.AddValue ("PosAllocSelector", "Position Allocator Selector: 0 list, 1 grid, 2 random rectangle, 3 random disc, 4 uniform disc", exp.m_posAllocSelector);
   cmd.AddValue ("UseMultithread", "flag to set the WOSS multithread option", exp.m_useMultithread);
+  cmd.AddValue ("UseThreadPool", "flag to set the WOSS multithread Thread pool option", exp.m_useThreadPool);
   cmd.AddValue ("UseTimeEvolution", "flag to set the WOSS time evolution option", exp.m_useTimeEvolution);
   cmd.AddValue ("NumberNodes", "Number of nodes", exp.m_numNodes);
   cmd.AddValue ("PktSize", "Packet size in bytes", exp.m_pktSize);

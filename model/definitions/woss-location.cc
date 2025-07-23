@@ -37,6 +37,8 @@ WossLocation::WossLocation (Ptr<MobilityModel> m)
 woss::CoordZ
 WossLocation::getLocation ()
 {
+  NS_ASSERT (m_mobModel != nullptr);
+
   Vector vector = m_mobModel->GetPosition ();
 
   return (woss::CoordZ::getCoordZFromCartesianCoords (vector.x, 

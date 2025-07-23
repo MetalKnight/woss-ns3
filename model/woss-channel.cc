@@ -75,11 +75,6 @@ WossChannel::WossChannel ()
 {
 }
 
-WossChannel::~WossChannel ()
-{
-}
-
-
 void
 WossChannel::DoInitialize (void)
 {
