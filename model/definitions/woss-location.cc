@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -34,15 +34,11 @@ WossLocation::WossLocation (Ptr<MobilityModel> m)
 }
 
 
-WossLocation::~WossLocation ()
-{
-
-}
-
-
 woss::CoordZ
 WossLocation::getLocation ()
 {
+  NS_ASSERT (m_mobModel != nullptr);
+
   Vector vector = m_mobModel->GetPosition ();
 
   return (woss::CoordZ::getCoordZFromCartesianCoords (vector.x, 

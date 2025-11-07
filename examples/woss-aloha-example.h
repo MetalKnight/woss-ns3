@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -61,6 +61,7 @@ public:
 
   std::string m_databasePath; //!< The path to the WOSS databases.
   bool m_useMultithread; //!< Enable/disable WOSS multithread feature.
+  bool m_useThreadPool; //!< Enable/disable WOSS multithread thread pool feature.
   bool m_useTimeEvolution; //!< Enable/disable the WOSS time evolution feature.
   uint32_t m_bytesTotal; //!< Total number of bytes received in a simulation run.
   UanTxMode m_dataMode; //!< List of UanTxModes used for data channels.

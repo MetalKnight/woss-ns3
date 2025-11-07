@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -26,21 +26,16 @@
 
 namespace ns3 {
 
-WossTimeReference::~WossTimeReference ()
-{
-
-}
-
 double
 WossTimeReference::getTimeReference () const
 {
   return Simulator::Now ().GetSeconds ();
 }
 
-WossTimeReference*
-WossTimeReference::clone ()
+std::unique_ptr<woss::TimeReference>
+WossTimeReference::clone () const
 {
-  return new WossTimeReference (*this);
+  return std::make_unique< WossTimeReference > (*this);
 }
 
 }

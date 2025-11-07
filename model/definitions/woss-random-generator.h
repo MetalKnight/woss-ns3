@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -70,7 +70,7 @@ public:
    */
   WossRandomGenerator& operator= ( const WossRandomGenerator& copy );
 
-  virtual ~WossRandomGenerator ();
+  virtual ~WossRandomGenerator () = default;
 
   /**
    * Mandatory virtual factory method that creates a new object.
@@ -83,7 +83,7 @@ public:
    * on the private m_RandVar
    * \param seed assigned stream
    */
-  virtual WossRandomGenerator* create ( int seed );
+  virtual std::unique_ptr<woss::RandomGenerator> create ( int seed ) const override;
 
   /**
    * Virtual factory method that creates a new object.
@@ -96,26 +96,26 @@ public:
    * on the private m_RandVar
    * \param seed assigned seed in double format
    */
-  virtual WossRandomGenerator* create ( double seed );
+  virtual std::unique_ptr<woss::RandomGenerator> create ( double seed ) const;
 
   /**
    * Mandatory virtual factory method that clones the current object.
    * It is inherited from the WOSS framework.
    * The returned object will draw from the same sub-stream of the source object.
    */
-  virtual WossRandomGenerator* clone () const;
+  virtual std::unique_ptr<woss::RandomGenerator> clone () const override;
 
   /**
    * returns a random double numer
    * \returns a random double number
    */
-  virtual double getRand () const;
+  virtual double getRand () const override;
 
   /**
    * returns a random integer numer in range [0, INT_MAX]
    * \returns a random integer number
    */
-  virtual int getRandInt () const;
+  virtual int getRandInt () const override;
 
   /**
    * Mandatory initialization method inherited from the WOSS framework.
@@ -124,7 +124,7 @@ public:
    * The initialization is performed only once.
    * \see AssignStreams
    */
-  virtual void initialize ();
+  virtual void initialize () override;
 
 
   /**

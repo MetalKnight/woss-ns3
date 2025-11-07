@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 /**
  * \file woss-aloha-example.cc
@@ -62,11 +62,12 @@ Experiment::Experiment ()
     m_simTime (Seconds (5000)),
     m_databasePath (""),
     m_useMultithread (true),
+    m_useThreadPool (true),
     m_useTimeEvolution (false),
     m_bytesTotal (0),
     m_dataMode ()
 {
-  //m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
+  //m_databasePath = "/home/fedwar/ns/ocean_databases/dbs";
 }
 
 void
@@ -85,9 +86,9 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
       wossHelper->SetAttribute ("BathyDbDebug", BooleanValue (false));
 #if defined (WOSS_NETCDF4_SUPPORT)
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (4)); // 15 seconds, 2D netcdf format
-      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2023.nc"));
+      wossHelper->SetAttribute ("BathyDbCoordFilePath", StringValue (m_databasePath + "/bathymetry/GEBCO_2025_sub_ice.nc"));
       wossHelper->SetAttribute ("SspDbWoaDbType", IntegerValue (1)); // 2013 WOA DB Format
-      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2018/WOA2018_SSP_April.nc"));
+      wossHelper->SetAttribute ("SspDbCoordFilePath", StringValue (m_databasePath + "/ssp/WOA2023/WOA2023_SSP_April.nc"));
       wossHelper->SetAttribute ("SedimentDbDeck41DbType", IntegerValue (1)); // DECK41 V2 database data format
 #else
       wossHelper->SetAttribute ("BathyDbGebcoFormat", IntegerValue (3)); // 30 seconds, 2D netcdf format
@@ -102,8 +103,9 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
   wossHelper->SetAttribute ("WossBellhopArrSyntax", IntegerValue (2)); // Check woss::BellhopArrSyntax; 2 means bellhop output syntax >= march 2019
   wossHelper->SetAttribute ("WossBellhopShdSyntax", IntegerValue (1));
   wossHelper->SetAttribute ("WossManagerTimeEvoActive", BooleanValue (m_useTimeEvolution));
-  wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (4));
+  wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (0));
   wossHelper->SetAttribute ("WossManagerUseMultithread", BooleanValue (m_useMultithread));
+  wossHelper->SetAttribute ("WossManagerUseThreadPool", BooleanValue (m_useThreadPool));
 
   wossHelper->Initialize (wossProp);
 
@@ -309,6 +311,7 @@ main (int argc, char *argv[])
   cmd.AddValue ("TotalRate", "Total channel capacity", exp.m_totalRate);
   cmd.AddValue ("PosAllocSelector", "Position Allocator Selector: 0 list, 1 grid, 2 random rectangle, 3 random disc, 4 uniform disc", exp.m_posAllocSelector);
   cmd.AddValue ("UseMultithread", "flag to set the WOSS multithread option", exp.m_useMultithread);
+  cmd.AddValue ("UseThreadPool", "flag to set the WOSS multithread Thread pool option", exp.m_useThreadPool);
   cmd.AddValue ("UseTimeEvolution", "flag to set the WOSS time evolution option", exp.m_useTimeEvolution);
   cmd.AddValue ("NumberNodes", "Number of nodes", exp.m_numNodes);
   cmd.AddValue ("PktSize", "Packet size in bytes", exp.m_pktSize);

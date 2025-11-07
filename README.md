@@ -33,6 +33,6 @@ How to install 'woss-ns3' with *waf* (**OBSOLETE**):
   - with no NetCDF support `./waf configure --with-woss-source=<woss_source_path> --with-woss-library=<woss_lib_path>`
 - finally run `./waf build`
 
-For info on how to install all the required libraries with the suggested paths, please check https://woss.dei.unipd.it/woss/doxygen/installation.html
+For info on how to install all the required libraries with the suggested paths, please check https://woss.dei.unipd.it/ 's installation guidelines.
 
 *Any issue should be reported via github Issue tracker or via e-mail to WOSS@guerra-tlc.com*.

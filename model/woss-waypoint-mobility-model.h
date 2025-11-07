@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -49,16 +49,16 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  WossWaypointMobilityModel (); //!< Default constructor
+  WossWaypointMobilityModel () = default; //!< Default constructor
 
-  virtual ~WossWaypointMobilityModel (); //!< Default destructor
+  virtual ~WossWaypointMobilityModel () = default; //!< Default destructor
 
 
 private:
   friend class WaypointMobilityModelNotifyTest; //!< To allow Update() calls and access to m_current
 
-  virtual void Update (void) const;
-  virtual void DoDispose (void);
+  virtual void Update (void) const override;
+  virtual void DoDispose (void) override;
 
 
 };

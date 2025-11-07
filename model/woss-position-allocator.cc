@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -297,13 +297,6 @@ WossRandomRectanglePositionAllocator::GetTypeId (void)
   return tid;
 }
 
-WossRandomRectanglePositionAllocator::WossRandomRectanglePositionAllocator ()
-{
-}
-
-WossRandomRectanglePositionAllocator::~WossRandomRectanglePositionAllocator ()
-{
-}
 
 void
 WossRandomRectanglePositionAllocator::SetLatitude (Ptr<RandomVariableStream> lat)
@@ -383,12 +376,6 @@ WossRandomBoxPositionAllocator::GetTypeId (void)
   return tid;
 }
 
-WossRandomBoxPositionAllocator::WossRandomBoxPositionAllocator ()
-{
-}
-WossRandomBoxPositionAllocator::~WossRandomBoxPositionAllocator ()
-{
-}
 
 void
 WossRandomBoxPositionAllocator::SetLatitude (Ptr<RandomVariableStream> lat)
@@ -471,14 +458,6 @@ WossRandomDiscPositionAllocator::GetTypeId (void)
                    MakeDoubleChecker<double>  ())
   ;
   return tid;
-}
-
-WossRandomDiscPositionAllocator::WossRandomDiscPositionAllocator ()
-{
-}
-
-WossRandomDiscPositionAllocator::~WossRandomDiscPositionAllocator ()
-{
 }
 
 void
@@ -583,10 +562,6 @@ WossUniformDiscPositionAllocator::WossUniformDiscPositionAllocator ()
 {
   m_BearVar = CreateObject<UniformRandomVariable> ();
   m_RangeVar = CreateObject<UniformRandomVariable> ();
-}
-
-WossUniformDiscPositionAllocator::~WossUniformDiscPositionAllocator ()
-{
 }
 
 void

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -23,6 +23,7 @@
 #ifndef WOSS_PROP_MODEL_H
 #define WOSS_PROP_MODEL_H
 
+#include <memory>
 #include "ns3/uan-prop-model-thorp.h"
 #include <woss-manager.h>
 
@@ -44,7 +45,7 @@ public:
   typedef ::std::vector< Ptr<MobilityModel> > MobModelVector; //!< ::std::vector of ns3::MobilityModel smart pointers
 
   WossPropModel (); //!< Default constructor
-  virtual ~WossPropModel (); //!< Default destructor
+  virtual ~WossPropModel () = default; //!< Default destructor
 
   /**
    * Register this type.
@@ -58,17 +59,17 @@ public:
    *
    * \param woss::wossManagerPtr the pointer must point to the same object for all prop object
    */
-  void SetWossManager (woss::WossManager* wossManagerPtr);
+  void SetWossManager (std::shared_ptr<woss::WossManager> wossManagerPtr);
 
   /**
    * returns a pointer to the woss::WossManager object
    */
-  woss::WossManager* const GetWossManager (void);
+  std::shared_ptr<woss::WossManager> const GetWossManager (void);
 
   /**
    * This function is not supported by the UAN-WOSS framework
    */
-  virtual double GetPathLossDb (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode);
+  virtual double GetPathLossDb (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode) override;
 
   /**
    * This function returns the Power Delay Profile between the two input nodes
@@ -77,7 +78,7 @@ public:
    * \param mode transmission mode
    * \returns the Power Delay Profile
    */
-  virtual UanPdp GetPdp (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode);
+  virtual UanPdp GetPdp (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode) override;
 
   /**
    * New function that takes advantage of the WOSS multithread feature.
@@ -92,7 +93,7 @@ public:
   /**
    * This function is not supported by the UAN-WOSS framework
    */
-  virtual Time GetDelay (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode);
+  virtual Time GetDelay (Ptr<MobilityModel> a, Ptr<MobilityModel> b, UanTxMode mode) override;
 
   /**
    * This function should be used as for time delay purposes
@@ -108,9 +109,9 @@ public:
 
 
 protected:
-  woss::WossManager* m_wossManager; //!< woss::WossManager object used to trigger acoustic channel computations
+  std::shared_ptr<woss::WossManager> m_wossManager; //!< woss::WossManager object used to trigger acoustic channel computations
 
-  virtual void DoInitialize (void);
+  virtual void DoInitialize (void) override;
 
   /**
    * Converts a ns3::UanPdp from a woss::TimeArr object, and symbol time in seconds
@@ -118,7 +119,7 @@ protected:
    * \param symbolTime the modulation symbol time in seconds
    * \returns a ns3::UanPdp object
    */
-  UanPdp CreateUanPdp (woss::TimeArr* timeArr, double symbolTime); // seconds
+  UanPdp CreateUanPdp (std::unique_ptr<woss::TimeArr> timeArr, double symbolTime); // seconds
 
   /**
    * Returns a woss::CoordZ object from the current position of the given mobility model

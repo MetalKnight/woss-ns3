@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -24,6 +24,9 @@
 #define WOSS_HELPER_H
 
 
+#include <string>
+#include <map>
+#include <memory>
 #include <ssp-definitions.h>
 #include <sediment-definitions.h>
 #include <altimetry-definitions.h>
@@ -90,13 +93,13 @@ class WossSimTime : public woss::SimTime
  * to the closest coordinates available.
  *
  * Transducer related features (i.e. full transducer type and transducer max/min vertical angles) can be defined for:
- * 1) transmitter mobility model, NULL means all transmitters
- * 2) receiver mobility model, NULL means all receivers
+ * 1) transmitter mobility model, nullptr means all transmitters
+ * 2) receiver mobility model, nullptr means all receivers
  *
  * Examples:
  * a) single tx-rx pair: 1) valid transmitter mobility model, 2) valid transmitter mobility model
- * b) single tx-all rx: 1) valid transmitter mobility model, 2) NULL receiver
- * c) all tx-rx pairs: 1) NULL, 2) NULL
+ * b) single tx-all rx: 1) valid transmitter mobility model, 2) nullptr receiver
+ * c) all tx-rx pairs: 1) nullptr, 2) nullptr
  *
  */
 class WossHelper : public Object
@@ -106,7 +109,7 @@ public:
 
   WossHelper (); //!< Default constructor.
 
-  virtual ~WossHelper (); //!< Default destructor.
+  virtual ~WossHelper () = default; //!< Default destructor.
 
   /**
    * see .c file for info on attributes
@@ -128,17 +131,17 @@ public:
    * \param rx the receiver
    * \returns true if successful, false otherwise
    */
-  bool SetAngles ( const woss::CustomAngles &angles, Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL );
+  bool SetAngles ( const woss::CustomAngles &angles, Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr );
 
   /**
-   * Converts a ::std::string into a woss::CustomAngles object and bounds it to a node pair
+   * Converts a std::string into a woss::CustomAngles object and bounds it to a node pair
    * \param angleString decimal degrees syntax = min|max
    * \param angles the woss::CustomAngles reference
    * \param tx the transmitter
    * \param rx the receiver
    * \returns true if successful, false otherwise
    */
-  bool SetAngles (const ::std::string &angleString, Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL );
+  bool SetAngles (const std::string &angleString, Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr );
 
   /**
    * Returns the woss::CustomAngles associated to the given transmitter and receiver pair.
@@ -146,14 +149,14 @@ public:
    * \param rx the receiver
    * \returns a valid woss::CustomAngles if the tx-rx pair is found, not valid object otherwise.
    */
-  woss::CustomAngles GetAngles ( Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL ) const;
+  woss::CustomAngles GetAngles ( Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr ) const;
 
   /**
    * Erases the woss::CustomAngles associated to the given transmitter and receiver pair.
    * \param tx the transmitter
    * \param rx the receiver
    */
-  void EraseAngles ( Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL );
+  void EraseAngles ( Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr );
 
   /**
    * Imports a custom woss::Transducer (described by a file in in ASCII format) and bounds it to its type name.
@@ -166,7 +169,7 @@ public:
    * \param fileName path to file
    * \returns true if successful, false otherwise
    */
-  bool ImportTransducerAscii (const ::std::string &typeName, const std::string &fileName);
+  bool ImportTransducerAscii (const std::string &typeName, const std::string &fileName);
 
   /**
    * Imports a custom woss::Transducer (described by a file in binary format) and bounds it to its type name.
@@ -174,7 +177,7 @@ public:
    * \param fileName path to file
    * \returns true if successful, false otherwise
    */
-  bool ImportTransducerBinary (const ::std::string &typeName, const std::string &fileName);
+  bool ImportTransducerBinary (const std::string &typeName, const std::string &fileName);
 
   /**
    * Bounds a woss::CustomTransducer to a node pair (transmitter - receiver)
@@ -183,10 +186,10 @@ public:
    * \param rx the receiver
    * \returns true if successful, false otherwise
    */
-  bool SetCustomTransducer ( const woss::CustomTransducer &type, Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL );
+  bool SetCustomTransducer ( const woss::CustomTransducer &type, Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr );
 
   /**
-   * Converts a ::std::string into a woss::CustomTransducer and then bounds it to a node pair.
+   * Converts a std::string into a woss::CustomTransducer and then bounds it to a node pair.
    * A CustomTransducer allows the user to define:
    * a) the woss::Transducer's type-name to be used
    * b) the beam pattern bearing orientation offset
@@ -198,7 +201,7 @@ public:
    * \param rx the receiver
    * \returns true if successful, false otherwise
    */
-  bool SetCustomTransducer ( const ::std::string &transducerString, Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL );
+  bool SetCustomTransducer ( const std::string &transducerString, Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr );
 
   /**
    * Returns the woss::CustomTransducer associated to the given transmitter and receiver pair.
@@ -206,14 +209,14 @@ public:
    * \param rx the receiver
    * \returns a valid woss::CustomTransducer if the tx-rx pair is found, not valid object otherwise.
    */
-  woss::CustomTransducer GetCustomTransducer ( Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL ) const;
+  woss::CustomTransducer GetCustomTransducer ( Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr ) const;
 
   /**
    * Erases the woss::CustomTransducer associated to the given transmitter and receiver pair.
    * \param tx the transmitter
    * \param rx the receiver
    */
-  void EraseCustomTransducer ( Ptr<MobilityModel> tx = NULL, Ptr<MobilityModel> rx = NULL );
+  void EraseCustomTransducer ( Ptr<MobilityModel> tx = nullptr, Ptr<MobilityModel> rx = nullptr );
 
   /**
    * Imports a custom woss::Altimetry and binds it to the designed space geometry.
@@ -225,7 +228,7 @@ public:
    * \param range the geometry range
    * \returns true if successful, false otherwise
    */
-  bool SetCustomAltimetry ( woss::Altimetry* const altimetry, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Altimetry),
+  bool SetCustomAltimetry ( const woss::Altimetry& altimetry, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Altimetry),
                             double bearing = WOSS_HELPER_ALL_BEARINGS (Altimetry),
                             double range = WOSS_HELPER_ALL_RANGES (Altimetry) );
 
@@ -234,9 +237,9 @@ public:
    * \param txCoord the geometry originating geographical coordinates
    * \param bearing the geometry bearing [radians]
    * \param range the geometry range
-   * \returns a valid woss::Altimetry pointer if found, NULL otherwise
+   * \returns a valid woss::Altimetry pointer if found, nullptr otherwise
    */
-  woss::Altimetry* GetCustomAltimetry ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Altimetry),
+  std::unique_ptr<woss::Altimetry> GetCustomAltimetry ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Altimetry),
                                         double bearing = WOSS_HELPER_ALL_BEARINGS (Altimetry),
                                         double range = WOSS_HELPER_ALL_RANGES (Altimetry) );
 
@@ -255,7 +258,7 @@ public:
    * A woss::Sediment allows the user to simulate a sea bottom with custom acoustic parameters
    * @see WossHelper for help on how to define a valid geometry
    */
-  bool SetCustomSediment ( woss::Sediment* const sediment, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Sediment),
+  bool SetCustomSediment ( const woss::Sediment& sediment, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Sediment),
                            double bearing = WOSS_HELPER_ALL_BEARINGS (Sediment),
                            double range = WOSS_HELPER_ALL_RANGES (Sediment) );
 
@@ -268,7 +271,7 @@ public:
    * \param range the geometry range
    * \returns true if successful, false otherwise
    */
-  bool SetCustomSediment ( const ::std::string &sediment_string, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Sediment),
+  bool SetCustomSediment ( const std::string &sediment_string, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Sediment),
                            double bearing = WOSS_HELPER_ALL_BEARINGS (Sediment),
                            double range = WOSS_HELPER_ALL_RANGES (Sediment) );
 
@@ -277,9 +280,9 @@ public:
    * \param txCoord the geometry originating geographical coordinates
    * \param bearing the geometry bearing [radians]
    * \param range the geometry range
-   * \returns a valid woss::Sediment pointer if found, NULL otherwise
+   * \returns a valid woss::Sediment pointer if found, nullptr otherwise
    */
-  woss::Sediment* GetCustomSediment ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Sediment),
+  std::unique_ptr<woss::Sediment> GetCustomSediment ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Sediment),
                                       double bearing = WOSS_HELPER_ALL_BEARINGS (Sediment),
                                       double range = WOSS_HELPER_ALL_RANGES (Sediment) );
 
@@ -306,13 +309,13 @@ public:
    * \param time_value the geometry time evolution step
    * \returns true if successful, false otherwise
    */
-  bool SetCustomSsp ( woss::SSP* const ssp, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
+  bool SetCustomSsp ( const woss::SSP& ssp, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
                       double bearing = WOSS_HELPER_ALL_BEARINGS (SSP),
                       double range = WOSS_HELPER_ALL_RANGES (SSP),
                       const woss::Time& time_value = WOSS_HELPER_ALL_TIMES (SSP) );
 
   /**
-   * Converts the input ::std::string into a custom woss::SSP object and assign it to the designed geometry
+   * Converts the input std::string into a custom woss::SSP object and assign it to the designed geometry
    * and simulation time validity.
    * \param sspString SSP in string format. syntax:
    *  - tot_values|depth_1[m]|SSP[m/s]|....|depth_final[m]|SSP_final[m/s]
@@ -322,7 +325,7 @@ public:
    * \param time_value the geometry time evolution step
    * \returns true if successful, false otherwise
    */
-  bool SetCustomSsp ( const ::std::string &sspString, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
+  bool SetCustomSsp ( const std::string &sspString, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
                       double bearing = WOSS_HELPER_ALL_BEARINGS (SSP),
                       double range = WOSS_HELPER_ALL_RANGES (SSP),
                       const woss::Time& time_value = WOSS_HELPER_ALL_TIMES (SSP) );
@@ -335,7 +338,7 @@ public:
    * \param range the geometry range
    * \param time_value the geometry time evolution step
    */
-  bool ImportCustomSsp ( const ::std::string &sspFileName, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
+  bool ImportCustomSsp ( const std::string &sspFileName, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
                          double bearing = WOSS_HELPER_ALL_BEARINGS (SSP),
                          const woss::Time& time_value = WOSS_HELPER_ALL_TIMES (SSP) );
 
@@ -345,9 +348,9 @@ public:
    * \param bearing the geometry bearing [radians]
    * \param range the geometry range
    * \param time_value the geometry time evolution step
-   * \returns a valid woss::SSP pointer if found, NULL otherwise
+   * \returns a valid woss::SSP pointer if found, nullptr otherwise
    */
-  woss::SSP* GetCustomSsp ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
+  std::unique_ptr<woss::SSP> GetCustomSsp ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (SSP),
                             double bearing = WOSS_HELPER_ALL_BEARINGS (SSP),
                             double range = WOSS_HELPER_ALL_RANGES (SSP),
                             const woss::Time& time_value = WOSS_HELPER_ALL_TIMES (SSP) );
@@ -374,12 +377,12 @@ public:
    * \param range the geometry range
    * \returns true if successful, false otherwise
    */
-  bool SetCustomBathymetry ( woss::Bathymetry* const bathymetry, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
+  bool SetCustomBathymetry ( const woss::Bathymetry& bathymetry, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
                              double bearing = WOSS_HELPER_ALL_BEARINGS (Bathymetry),
                              double range = WOSS_HELPER_ALL_RANGES (Bathymetry) );
 
   /**
-   * reads the input ::std::string and converts it into a custom woss::Bathymetry object and binds it to
+   * reads the input std::string and converts it into a custom woss::Bathymetry object and binds it to
    * the input geometry
    * \param bathyLine bathymetry in string format. syntax:
    *  - tot_ranges|range_1[m]|dept_1[n]|....|range_final[m]|depth_final[m]
@@ -387,7 +390,7 @@ public:
    * \param bearing the geometry bearing [radians]
    * \returns true if successful, false otherwise
    */
-  bool SetCustomBathymetry ( const ::std::string &bathyLine, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
+  bool SetCustomBathymetry ( const std::string &bathyLine, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
                              double bearing = WOSS_HELPER_ALL_BEARINGS (Bathymetry) );
 
   /**
@@ -398,7 +401,7 @@ public:
    * \param bearing the geometry bearing [radians]
    * \returns true if successful, false otherwise
    */
-  bool ImportCustomBathymetry ( const ::std::string &bathyFile, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
+  bool ImportCustomBathymetry ( const std::string &bathyFile, const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
                                 double bearing = WOSS_HELPER_ALL_BEARINGS (Bathymetry) );
 
   /**
@@ -406,9 +409,9 @@ public:
    * \param txCoord the geometry originating geographical coordinates
    * \param bearing the geometry bearing [radians]
    * \param range the geometry range
-   * \returns a valid woss::Bathymetry pointer if found, NULL otherwise
+   * \returns a valid woss::Bathymetry pointer if found, nullptr otherwise
    */
-  woss::Bathymetry* GetCustomBathymetry ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
+  woss::Bathymetry GetCustomBathymetry ( const woss::Coord& txCoord = WOSS_HELPER_ALL_COORDS (Bathymetry),
                                           double bearing = WOSS_HELPER_ALL_BEARINGS (Bathymetry),
                                           double range = WOSS_HELPER_ALL_RANGES (Bathymetry) );
 
@@ -431,7 +434,7 @@ protected:
 private:
   void CheckInitialized (void) const; //!< Checks if Helper is correctly initialized
 
-  typedef ::std::map< MobilityModel*, WossLocation* > MobLocMap;  //!< ::std::map that associates a ns3::MobilityModel pointer to a ns3::WossLocation pointer.
+  typedef std::map< MobilityModel*, std::shared_ptr<WossLocation> > MobLocMap;  //!< std::map that associates a ns3::MobilityModel pointer to a ns3::WossLocation pointer.
   typedef MobLocMap::iterator MLMIter; //!< iterator typedef
   typedef MobLocMap::const_iterator MLMCIter; //!< constant iterator typedef
   typedef MobLocMap::reverse_iterator MLMRIter; //!< reverse iterator typedef
@@ -440,14 +443,9 @@ private:
   /**
    * Converts a input ns3::Ptr<MobilityModel> to a naked ns3::WossLocation pointer, in order to manage the current node position within the WOSS framework.
    * \param ptr a ns3::Ptr to a ns3::MobilityModel
-   * \returns a valid pointer to a ns3::WossLocation
+   * \returns a valid std::shared_pointer to a ns3::WossLocation
    */
-  WossLocation* GetWossLocation ( Ptr<MobilityModel> ptr );
-
-  /**
-   * Clears the MobLocMap object
-   */
-  void DeleteWossLocationMap (void);
+  std::shared_ptr<WossLocation> GetWossLocation ( Ptr<MobilityModel> ptr );
 
   /**
    * Creates a directory with the input path. The user must have proper authorization
@@ -455,33 +453,34 @@ private:
    * \param path the directory path
    * \returns true if successful, false otherwise
    */
-  bool CreateDirectory (const ::std::string& path);
+  bool CreateDirectory (const std::string& path);
 
   MobLocMap m_locMap; //!< map of all simulated nodes
 
-  woss::SSP m_sspProto; //!< woss::SSP prototype which will be plugged into the WOSS framework.
-  woss::Sediment m_sedimentProto; //!< woss::Sediment prototype which will be plugged into the WOSS framework.
-  woss::Pressure m_pressureProto; //!< woss::Pressure prototype which will be plugged into the WOSS framework.
-  woss::TimeArr m_timeArrProto; //!< woss::TimeArr prototype which will be plugged into the WOSS framework.
-  woss::Transducer m_transducerProto; //!< woss::Transducer prototype which will be plugged into the WOSS framework.
-  woss::AltimBretschneider m_altimBretProto; //!< woss::AltimBretschneider prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::SSP> m_sspProto; //!< woss::SSP prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::Sediment> m_sedimentProto; //!< woss::Sediment prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::Pressure> m_pressureProto; //!< woss::Pressure prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::TimeArr> m_timeArrProto; //!< woss::TimeArr prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::Transducer> m_transducerProto; //!< woss::Transducer prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::AltimBretschneider> m_altimBretProto; //!< woss::AltimBretschneider prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<woss::Location> m_locationProto; //!< woss::Location prototype which will be plugged into the WOSS framework.
   int64_t m_wossRandomGenStream; //!< random generator used by the WOSS framework.
-  WossRandomGenerator m_randomGenProto; //!< woss::RandomGenerator prototype which will be plugged into the WOSS framework.
-  WossTimeReference m_timeRefProto; //!< woss::TimeReference prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<WossRandomGenerator> m_randomGenProto; //!< woss::RandomGenerator prototype which will be plugged into the WOSS framework.
+  std::unique_ptr<WossTimeReference> m_timeRefProto; //!< woss::TimeReference prototype which will be plugged into the WOSS framework.
 
-  woss::DefHandler *m_defHandler; //!< Definition Handler object allocated by the helper.
+  woss::DefHandler& m_defHandler; //!< Definition Handler object allocated by the helper.
 
   bool m_resDbCreatorDebug; //!< enable/disable the debug prints of the woss results database creator.
   bool m_resDbDebug; //!< enable/disable the debug prints of the woss result databases.
   bool m_resDbUseBinary; //!< set up the woss result database format: binary or textual.
   bool m_resDbUseTimeArr; //!< set up the woss result databases data format: power delay profile or single pressure tap.
   double m_resDbSpaceSampling; //!< set up the woss result database 2D spatial sampling
-  ::std::string m_resDbFilePath; //!< set up the woss result database file path
-  ::std::string m_resDbFileName; //!< set up the woss result database file name (without path)
-  woss::ResPressureBinDbCreator *m_resDbCreatorPressBin; //!< the helper will automatically allocate the desired result database creator based on current configuration.
-  woss::ResPressureTxtDbCreator *m_resDbCreatorPressTxt; //!< the helper will automatically allocate the desired result database creator based on current configuration.
-  woss::ResTimeArrBinDbCreator *m_resDbCreatorTimeArrBin; //!< the helper will automatically allocate the desired result database creator based on current configuration.
-  woss::ResTimeArrTxtDbCreator *m_resDbCreatorTimeArrTxt; //!< the helper will automatically allocate the desired result database creator based on current configuration.
+  std::string m_resDbFilePath; //!< set up the woss result database file path
+  std::string m_resDbFileName; //!< set up the woss result database file name (without path)
+  std::shared_ptr<woss::ResPressureBinDbCreator> m_resDbCreatorPressBin; //!< the helper will automatically allocate the desired result database creator based on current configuration.
+  std::shared_ptr<woss::ResPressureTxtDbCreator> m_resDbCreatorPressTxt; //!< the helper will automatically allocate the desired result database creator based on current configuration.
+  std::shared_ptr<woss::ResTimeArrBinDbCreator> m_resDbCreatorTimeArrBin; //!< the helper will automatically allocate the desired result database creator based on current configuration.
+  std::shared_ptr<woss::ResTimeArrTxtDbCreator> m_resDbCreatorTimeArrTxt; //!< the helper will automatically allocate the desired result database creator based on current configuration.
 
 #if defined (WOSS_NETCDF_SUPPORT)
   bool m_sedimDbCreatorDebug; //!< enable/disable the debug prints of the woss sediment database creator.
@@ -489,29 +488,29 @@ private:
 #if defined (WOSS_NETCDF4_SUPPORT)
   int m_sedimDbDeck41DbType; //!< set the DECK41 database data format type. 0 = V1 data format, 1 = V2 data format
 #endif // defined (WOSS_NETCDF4_SUPPORT)
-  ::std::string m_sedimDbCoordFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with decimal degrees resolution
-  ::std::string m_sedimDbMarsdenFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with marsden square resolution
-  ::std::string m_sedimDbMarsdenOneFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with marsden one square resolution
-  woss::SedimDeck41DbCreator *m_sedimDbCreator; //!< the helper will automatically allocate the woss sediment database creator
+  std::string m_sedimDbCoordFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with decimal degrees resolution
+  std::string m_sedimDbMarsdenFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with marsden square resolution
+  std::string m_sedimDbMarsdenOneFilePath; //!< setup the path of the sediment database indexed by geographical coordinates with marsden one square resolution
+  std::shared_ptr<woss::SedimDeck41DbCreator> m_sedimDbCreator; //!< the helper will automatically allocate the woss sediment database creator
 
   bool m_sspDbCreatorDebug; //!< enable/disable the debug prints of the woss SSP database creator.
   bool m_sspDbDebug; //!< enable/disable the debug prints of the woss SSP database.
-  ::std::string m_sspDbFilePath; //!< setup the path of the woss monthly SSP database indexed by geographical coordinates
+  std::string m_sspDbFilePath; //!< setup the path of the woss monthly SSP database indexed by geographical coordinates
 #if defined (WOSS_NETCDF4_SUPPORT)
   int m_sspWoaDbType; //!< WOA SSP Db Type: 0 = 2005 format Db, 1 2013 Format Db
 #endif // defined (WOSS_NETCDF_SUPPORT)
-  woss::SspWoa2005DbCreator *m_sspDbCreator; //!< the helper will automatically allocate the woss sediment database creator
+  std::shared_ptr<woss::SspWoa2005DbCreator> m_sspDbCreator; //!< the helper will automatically allocate the woss sediment database creator
 
   bool m_bathyDbCreatorDebug; //!< enable/disable the debug prints of the woss Bathymetry database creator.
   bool m_bathyDbDebug; //!< enable/disable the debug prints of the woss Bathymetry database (GEBCO).
   int m_bathyDbGebcoFormat; //!< setup the the GEBCO database format: 0=1D one minute, 1=1D 30 seconds, 2=2D one minute, 3=2D 30 seconds, 4=2D 15 seconds
-  ::std::string m_bathyDbFilePath; //!< setup the path of the woss GEBCO database
-  woss::BathyGebcoDbCreator *m_bathyDbCreator; //!< the helper will automatically allocate the woss GEBCO bathymetry db creator
+  std::string m_bathyDbFilePath; //!< setup the path of the woss GEBCO database
+  std::shared_ptr<woss::BathyGebcoDbCreator> m_bathyDbCreator; //!< the helper will automatically allocate the woss GEBCO bathymetry db creator
 #endif // defined (WOSS_NETCDF_SUPPORT)
 
   bool m_wossDbManagerDebug; //!< enable/disable the debug prints of the woss DB manager object.
 
-  woss::WossDbManager *m_wossDbManager; //!< the helper will automatically allocate the woss DB manager
+  std::shared_ptr<woss::WossDbManager> m_wossDbManager; //!< the helper will automatically allocate the woss DB manager
 
   bool m_wossCreatorDebug; //!< enable/disable the debug prints of the woss creator.
   bool m_wossDebug; //!< enable/disable the debug prints of all woss objects
@@ -534,17 +533,17 @@ private:
   double m_maxAngle;  //!< woss object configuration: maximum vertical angle in decimal degrees
   double m_sspDepthPrecision;  //!< woss object configuration: SSP depth precision in meters
   double m_normalizedSspDepthSteps;  //!< woss object configuration: SSP depth quantization steps
-  ::std::string m_workDirPath;  //!< woss object configuration: path of the temporary directory
-  ::std::string m_bellhopPath;  //!< woss object configuration: path of the Bellhop executable
-  ::std::string m_bellhopMode;  //!< woss object configuration: Bellhop mode string
-  ::std::string m_bellhopBeamOptions;  //!< woss object configuration: Bellhop beam option string
-  ::std::string m_bellhopBathyType;  //!< woss object configuration: Bellhop bathymetry type string
-  ::std::string m_bathyMethod; //!< woss object configuration: Bathymetry write method string
-  ::std::string m_bellhopAltimType;  //!< woss object configuration: Bellhop Altimetry type string
+  std::string m_workDirPath;  //!< woss object configuration: path of the temporary directory
+  std::string m_bellhopPath;  //!< woss object configuration: path of the Bellhop executable
+  std::string m_bellhopMode;  //!< woss object configuration: Bellhop mode string
+  std::string m_bellhopBeamOptions;  //!< woss object configuration: Bellhop beam option string
+  std::string m_bellhopBathyType;  //!< woss object configuration: Bellhop bathymetry type string
+  std::string m_bathyMethod; //!< woss object configuration: Bathymetry write method string
+  std::string m_bellhopAltimType;  //!< woss object configuration: Bellhop Altimetry type string
   int m_bellhopArrSyntax; //!< woss object configration: Bellhop Arr file syntax to be used during .arr file parsing, range [0,2]
   int m_bellhopShdSyntax; //!< woss object configration: Bellhop Shd file syntax to be used during .shd file parsing, range [0,1]
   WossSimTime m_simTime;  //!< woss object configuration: woss simulation times (start and end sim times)
-  woss::BellhopCreator *m_bellhopCreator; //!< the helper will automatically allocate the woss creator
+  std::shared_ptr<woss::BellhopCreator> m_bellhopCreator; //!< the helper will automatically allocate the woss creator
   double m_boxDepth; //!< woss object configuration: maximum depth to trace rays to; deeper rays will be ignored
   double m_boxRange; //!< woss object configuration: maximum range to trace rats to; longer rays will be ignored
 
@@ -553,14 +552,15 @@ private:
   int m_concurrentThreads; //!< number of concurrent threads (0 = auto).
   double m_wossManagerSpaceSampling; //!< woss manager space sampling in meters
   bool m_wossManagerUseMultiThread; //!< enable/disable the multithread feature
-  woss::WossManagerSimple<woss::WossManagerResDb> *m_wossManagerSimple; //!<  the helper will automatically allocate the desired woss manager based on current configuration.
-  woss::WossManagerSimple<woss::WossManagerResDbMT> *m_wossManagerMulti; //!<  the helper will automatically allocate the desired woss manaeger based on current configuration.
+  bool m_wossManagerUseThreadPool; //!< enable/disable multithread's thread pool feature
+  std::shared_ptr<woss::WossManagerSimple<woss::WossManagerResDb> > m_wossManagerSimple; //!<  the helper will automatically allocate the desired woss manager based on current configuration.
+  std::shared_ptr<woss::WossManagerSimple<woss::WossManagerResDbMT> > m_wossManagerMulti; //!<  the helper will automatically allocate the desired woss manaeger based on current configuration.
 
   bool m_wossTransducerHndlDebug; //!< enable/disable the debug prints of the woss transducer handler.
-  woss::TransducerHandler *m_wossTransducerHndl; //!< the helper will automatically allocate the woss Transducer handler.
+  std::shared_ptr<woss::TransducerHandler> m_wossTransducerHndl; //!< the helper will automatically allocate the woss Transducer handler.
 
   bool m_wossControllerDebug; //!< enable/disable the debug prints of the woss conteroller
-  woss::WossController *m_wossController; //!< the helper will automatically allocate the woss controller.
+  std::shared_ptr<woss::WossController> m_wossController; //!< the helper will automatically allocate the woss controller.
 
   bool m_initialized; //!< initialization complete flag.
 };
@@ -571,8 +571,8 @@ private:
  * \param simTime WossSimTime
  * \returns ostream
  */
-::std::ostream &operator << (::std::ostream &os, const WossSimTime &simTime);
-::std::istream &operator >> (::std::istream &is, WossSimTime &simeTime);
+std::ostream &operator << (std::ostream &os, const WossSimTime &simTime);
+std::istream &operator >> (std::istream &is, WossSimTime &simeTime);
 
 /**
  * Helper function that creates a Vector cartesian coordinates in WGS84 format converted from geographic coordinates

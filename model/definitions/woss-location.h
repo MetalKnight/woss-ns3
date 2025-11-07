@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -43,9 +43,9 @@ public:
   /**
    * \param model underlying ns3::MobilityModel
    */
-  WossLocation (Ptr<MobilityModel> model);
+  WossLocation (Ptr<MobilityModel> model = nullptr);
 
-  virtual ~WossLocation ();
+  virtual ~WossLocation () = default;
 
   /**
    * This is the main function called by the WOSS framework in order to get
@@ -54,7 +54,7 @@ public:
    * \returns converts the underlying MobilityModel::GetPosition()
    * into a woss::CoordZ object
    */
-  virtual woss::CoordZ getLocation ();
+  virtual woss::CoordZ getLocation () override;
 
 
   void SetMobilityModel (Ptr<MobilityModel> model);
@@ -62,6 +62,7 @@ public:
   Ptr<MobilityModel> GetMobilityModel ();
 
 protected:
+
   Ptr<MobilityModel> m_mobModel;
 
 };

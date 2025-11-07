@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -43,20 +43,20 @@ class WossTimeReference : public woss::TimeReference
 
 
 public:
-  virtual ~WossTimeReference ();
+  virtual ~WossTimeReference () = default;
 
   /**
    * returns the current NS3 time in seconds represented as a double.
    * \returns the current NS3 time in seconds in double representation
    */
-  virtual double getTimeReference () const;
+  virtual double getTimeReference () const override;
 
   /**
    * Mandatory virtual factory method that returns a new WossTimeReference created via
    * copy-constructor. The new object will return the same time-reference as the source
    * object since they both rely on ns3::Scheduler::Now ()
    */
-  virtual WossTimeReference* clone ();
+  virtual std::unique_ptr<woss::TimeReference> clone () const override;
 
 
 };

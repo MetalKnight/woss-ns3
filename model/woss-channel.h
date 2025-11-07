@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Federico Guerra <federico@guerra-tlc.com>
+ * Author: Federico Guerra <WOSS@guerra-tlc.com>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -41,7 +41,7 @@ class WossChannel : public UanChannel
 {
 public:
   WossChannel (); //!< Default Constructor
-  virtual ~WossChannel (); //!< Default destructor
+  virtual ~WossChannel () = default; //!< Default destructor
 
   /**
    * Register this type.
@@ -57,7 +57,7 @@ public:
    * Sends a packet out on the channel
    */
   virtual void TxPacket  (Ptr<UanTransducer> src, Ptr<Packet> packet, double txPowerDb,
-                          UanTxMode txmode);
+                          UanTxMode txmode) override;
 
 protected:
   /**
@@ -68,7 +68,7 @@ protected:
 
   Ptr<WossPropModel> m_wossPropModel; //!< Smart ptr to a WossPropModel object
 
-  virtual void DoInitialize (void);
+  virtual void DoInitialize (void) override;
 };
 
 }

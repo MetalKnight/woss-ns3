@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Authors: Federico Guerra <federico@guerra-tlc.com>, Randall Plate <rplate@spawar.navy.mil>
+ * Authors: Federico Guerra <WOSS@guerra-tlc.com>, Randall Plate <rplate@spawar.navy.mil>
  */
 
 #ifdef NS3_WOSS_SUPPORT
@@ -84,6 +84,7 @@ private:
   ::std::string m_databasePath;
   bool m_useTimeEvolution;
   bool m_useMultithread;
+  bool m_useThreadPool;
   woss::CoordZ m_sinkCoord;
 
 };
@@ -94,6 +95,7 @@ WossTest::WossTest ()
     m_databasePath (""),
     m_useTimeEvolution (false),
     m_useMultithread (false),
+    m_useThreadPool (true),
     m_sinkCoord (42.59, 10.125, 70.0)
 {
   //m_databasePath = "/home/fedwar/ns/ocean_database/dbs";
@@ -131,6 +133,7 @@ WossTest::InitWossHelper (Ptr<WossPropModel> wossProp)
   m_wossHelper->SetAttribute ("WossManagerTimeEvoActive", BooleanValue (m_useTimeEvolution));
   m_wossHelper->SetAttribute ("WossManagerTotalThreads", IntegerValue (4));
   m_wossHelper->SetAttribute ("WossManagerUseMultithread", BooleanValue (m_useMultithread));
+  m_wossHelper->SetAttribute ("WossManagerUseThreadPool", BooleanValue (m_useThreadPool));
 
   m_wossHelper->Initialize (wossProp);
 
