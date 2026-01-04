@@ -535,6 +535,7 @@ private:
   double m_normalizedSspDepthSteps;  //!< woss object configuration: SSP depth quantization steps
   std::string m_workDirPath;  //!< woss object configuration: path of the temporary directory
   std::string m_bellhopPath;  //!< woss object configuration: path of the Bellhop executable
+  std::string m_bellhopBinName;  //!< woss object configuration: Bellhop binary name
   std::string m_bellhopMode;  //!< woss object configuration: Bellhop mode string
   std::string m_bellhopBeamOptions;  //!< woss object configuration: Bellhop beam option string
   std::string m_bellhopBathyType;  //!< woss object configuration: Bellhop bathymetry type string

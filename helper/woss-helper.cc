@@ -57,6 +57,7 @@
 #define WH_ALTIMETRY_TYPE_DEFAULT "L"
 #define WH_SIMULATION_TIMES_DEFAULT ()
 #define WH_CONCURRENT_THREADS_DEFAULT (0.0)
+#define WH_BELLHOP_BIN_NAME_DEFAULT "bellhop.exe"
 #define WH_BELLHOP_ARR_SYNTAX_DEFAULT (2)
 #define WH_BELLHOP_ARR_SYNTAX_MIN (0)
 #define WH_BELLHOP_ARR_SYNTAX_MAX (2)
@@ -250,6 +251,7 @@ WossHelper::WossHelper ()
     m_normalizedSspDepthSteps (WH_NORMALIZED_SSP_DEPTH_STEPS_DEFAULT),
     m_workDirPath (WH_WORK_PATH_DEFAULT),
     m_bellhopPath (WH_STRING_DEFAULT),
+    m_bellhopBinName (WH_BELLHOP_BIN_NAME_DEFAULT),
     m_bellhopMode (WH_BELLHOP_MODE_DEFAULT),
     m_bellhopBeamOptions (WH_BEAM_OPTIONS_DEFAULT),
     m_bellhopBathyType (WH_BATHYMETRY_TYPE_DEFAULT),
@@ -438,6 +440,7 @@ WossHelper::Initialize (Ptr<WossPropModel> wossPropModel)
   m_bellhopCreator->setSspDepthPrecision (m_sspDepthPrecision);
   m_bellhopCreator->setSspDepthSteps (m_normalizedSspDepthSteps);
   m_bellhopCreator->setBellhopPath (m_bellhopPath);
+  m_bellhopCreator->setBellhopBinName (m_bellhopBinName);
   m_bellhopCreator->setBhMode (m_bellhopMode);
   m_bellhopCreator->setBeamOptions (m_bellhopBeamOptions);
   m_bellhopCreator->setBathymetryType (m_bellhopBathyType);
@@ -1424,6 +1427,11 @@ WossHelper::GetTypeId ()
                    "the full path of bellhop executable. Leave blank if already in environment search path",
                    StringValue (WH_STRING_DEFAULT),
                    MakeStringAccessor (&WossHelper::m_bellhopPath),
+                   MakeStringChecker () )
+    .AddAttribute ("WossBellhopBinName",
+                   "the bellhop binary name. The default is " WH_BELLHOP_BIN_NAME_DEFAULT,
+                   StringValue (WH_BELLHOP_BIN_NAME_DEFAULT),
+                   MakeStringAccessor (&WossHelper::m_bellhopBinName),
                    MakeStringChecker () )
     .AddAttribute ("WossBellhopMode",
                    "the bellhop running mode. see WOSS doxygen for supported modes",

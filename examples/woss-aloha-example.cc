@@ -98,6 +98,7 @@ Experiment::InitWossHelper (Ptr<WossHelper> wossHelper, Ptr<WossPropModel> wossP
 #endif // defined (WOSS_NETCDF_SUPPORT)
     }
   wossHelper->SetAttribute ("WossCleanWorkDir", BooleanValue (false));
+  wossHelper->SetAttribute ("WossBellhopBinName", StringValue ("bellhop.exe"));
   wossHelper->SetAttribute ("WossWorkDirPath", StringValue ("./woss-aloha-example-output/work-dir/"));
   wossHelper->SetAttribute ("WossSimTime", StringValue ("1|10|2012|0|1|1|1|10|2012|0|1|1"));
   wossHelper->SetAttribute ("WossBellhopArrSyntax", IntegerValue (2)); // Check woss::BellhopArrSyntax; 2 means bellhop output syntax >= march 2019
