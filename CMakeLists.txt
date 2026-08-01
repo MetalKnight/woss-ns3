@@ -163,3 +163,5 @@ build_lib(
   TEST_SOURCES test/woss-test.cc
 )
 
+#woss-ns3 depends on UAN and other modules
+target_compile_options(woss-ns3-test PRIVATE -UNS3_MODULE_COMPILATION)
